@@ -29,7 +29,23 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 1400 } })
 page.on('console', m => { if (m.type() === 'error') errors.push(`console: ${m.text()}`) })
 page.on('pageerror', e => errors.push(`pageerror: ${e.message}`))
 
+// Wait for the page to have finished its own work, not just the network's.
+//
+// `networkidle` fires when requests stop, which on a page that queries in two
+// rounds is while the first spinner is still on screen — so a screenshot taken
+// then shows a spinner and looks like a broken page to whoever reads it later.
+// Every page here drops its spinner once it has something to draw, so waiting
+// for the spinner to go is the honest signal.
+async function settled() {
+  await page.waitForLoadState('networkidle')
+  await page.locator('[role="status"]').first()
+    .waitFor({ state: 'detached', timeout: 10_000 })
+    .catch(() => {})   // pages with no spinner at all never had one to lose
+  await page.waitForTimeout(250)
+}
+
 async function shot(name) {
+  await settled()
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: true })
   console.log(`  shot ${name}`)
 }
