@@ -6,8 +6,8 @@
 // tests, and renders blank because a query came back in a shape the component
 // did not expect.
 //
-//   make start && make dev    (in another terminal)
-//   make smoke
+//   npm run db:start && npm run dev    (in another terminal)
+//   npm run smoke
 //
 // Screenshots land in ./screenshots, which is gitignored: they are for looking
 // at, not for diffing.

@@ -1,6 +1,6 @@
 # Testing
 
-Three suites, split by what they are allowed to touch. `make test` runs
+Three suites, split by what they are allowed to touch. `npm test` runs
 typecheck, lint and all three.
 
 ## unit — `src/**/*.test.ts`, `workers/**/src/*.test.ts`
@@ -70,12 +70,12 @@ in `afterAll`, because the other suites read those.
 ## Running
 
 ```sh
-make test              # typecheck + lint + all three
-make test-unit         # fast, no Docker
-make test-integration  # needs make start
-make test-scenario     # needs make start
-make smoke             # a real browser; needs make dev too
-make preflight         # everything, including smoke. Run before pushing.
+npm test              # typecheck + lint + all three
+npm run test:unit         # fast, no Docker
+npm run test:integration  # needs npm run db:start
+npm run test:scenario     # needs npm run db:start
+npm run smoke             # a real browser; needs npm run dev too
+npm run preflight         # everything, including smoke. Run before pushing.
 ```
 
 ## What belongs where
@@ -87,4 +87,4 @@ make preflight         # everything, including smoke. Run before pushing.
 | A constraint, trigger or policy | integration |
 | A new value in a vocabulary | the vocabulary tests in `constraints.test.ts` |
 | A feature that spans several tables | scenario |
-| A page that might render blank | `make smoke` |
+| A page that might render blank | `npm run smoke` |

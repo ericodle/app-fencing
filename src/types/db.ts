@@ -1,6 +1,6 @@
 // The app's handle on the database schema.
 //
-// src/types/database.ts is generated and overwritten by `make types`; this file
+// src/types/database.ts is generated and overwritten by `npm run db:types`; this file
 // is hand-written and sits beside it, holding two things:
 //
 //   1. Short aliases for the row types, so app code says `Profile` rather than

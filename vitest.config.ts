@@ -43,7 +43,7 @@ export default defineConfig({
         },
       },
       {
-        // Runs against the live local Supabase stack — `make start` first.
+        // Runs against the live local Supabase stack — `npm run db:start` first.
         // These do NOT mock the database on purpose: the whole point is
         // catching drift between what the app thinks the schema does and what
         // it does. Constraints, triggers and RLS policies are only really

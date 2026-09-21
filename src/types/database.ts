@@ -1,4 +1,4 @@
-// GENERATED FILE — DO NOT EDIT. Regenerate with `make types` after every
+// GENERATED FILE — DO NOT EDIT. Regenerate with `npm run db:types` after every
 // migration. The hand-written aliases and the compile-time guards that pin the
 // app's vocabularies to this schema live next door in src/types/db.ts.
 

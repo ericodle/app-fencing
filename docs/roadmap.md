@@ -33,7 +33,7 @@ in the app yet asks for notification permission or writes a row to
 `push_subscriptions`.
 
 **Component tests.** The pure layer is well covered; the React components are
-covered by `make smoke` rather than by render tests. `BoutForm` and
+covered by `npm run smoke` rather than by render tests. `BoutForm` and
 `MeetupPanel` are the two worth doing first — both carry real logic.
 
 **zh-TW in anger.** The catalog is complete and type-checked, but the app has
