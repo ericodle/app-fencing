@@ -1,7 +1,7 @@
 -- Local-only club fixtures: venues, a term's worth of sessions, an open
 -- attendance poll with answers, bouts, a competition and some benchmarks.
 --
--- Enough for every page to have something on it the moment `make start`
+-- Enough for every page to have something on it the moment `npm run db:start`
 -- finishes, and specifically enough for the meetup planner to produce a real
 -- answer — five people spread across Taipei, which is the case the feature
 -- exists for. NEVER pushed to the cloud.
@@ -10,11 +10,11 @@
 insert into public.club_profile (id, mission, about)
 values (true,
   'Physical training, mental training, data-driven. Épée and saber in Taipei, taught in English and Chinese.',
-  'Sheshouzuo Fencing Club opened in December 2019 under Sagittarius, the archer. Guests from other clubs are welcome at open training.')
+  'Kuou Fencing Club opened in December 2019. Coach Ku takes saber and Coach Eric takes épée. Guests from other clubs are welcome at open training.')
 on conflict (id) do nothing;
 
 insert into public.club_contact (id, email, phone, address, native_address, map_query, hours)
-values (true, 'hello@sheshouzuo.tw', '+886 2 2762 1234',
+values (true, 'hello@kuou.tw', '+886 2 2762 1234',
   'No. 128, Section 4, Bade Road, Songshan District, Taipei',
   '台北市松山區八德路四段128號',
   'No. 128, Section 4, Bade Road, Taipei',
@@ -22,14 +22,14 @@ values (true, 'hello@sheshouzuo.tw', '+886 2 2762 1234',
 on conflict (id) do nothing;
 
 insert into public.contact_channels (channel, label, url, handle, sort_order) values
-  ('line',      'LINE',      'https://line.me/R/ti/p/@sheshouzuo',       '@sheshouzuo',        1),
-  ('instagram', 'Instagram', 'https://instagram.com/sheshouzuofencing',  '@sheshouzuofencing', 2),
-  ('email',     'Email',     'mailto:hello@sheshouzuo.tw',               'hello@sheshouzuo.tw',3)
+  ('line',      'LINE',      'https://line.me/R/ti/p/@kuoufencing',      '@kuoufencing',       1),
+  ('instagram', 'Instagram', 'https://instagram.com/kuoufencing',        '@kuoufencing',       2),
+  ('email',     'Email',     'mailto:hello@sheshouzuo.tw',               'hello@kuou.tw',3)
 on conflict do nothing;
 
 insert into public.terms (version, body, published_at)
 values (1,
-  E'# Terms of use\n\nBy training with Sheshouzuo Fencing Club you agree to follow the coach''s instructions on the floor, to fence only in full kit, and to report any damaged equipment before using it.\n\nFencing is a combat sport. Bruises are normal; anything more is not, and must be reported.',
+  E'# Terms of use\n\nBy training with Kuou Fencing Club you agree to follow the coach''s instructions on the floor, to fence only in full kit, and to report any damaged equipment before using it.\n\nFencing is a combat sport. Bruises are normal; anything more is not, and must be reported.',
   now())
 on conflict (version) do nothing;
 
@@ -159,10 +159,19 @@ insert into public.events (
   'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
 ) on conflict (id) do nothing;
 
+-- The rota, split by weapon: Coach Ku on saber, Coach Eric on épée. Open
+-- training runs both, so both are on it — which is also what makes the duties
+-- table worth having rather than a single coach column on the event.
 insert into public.duties (event_id, assignee_id, role) values
+  -- Open training (épée + saber)
   ('22222222-0000-4000-8000-000000000001', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'coach'),
+  ('22222222-0000-4000-8000-000000000001', 'cccccccc-1111-4111-8111-cccccccccccc', 'coach'),
+  -- Saber night
   ('22222222-0000-4000-8000-000000000003', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'coach'),
-  ('22222222-0000-4000-8000-000000000007', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'coach')
+  -- Interclub, team épée
+  ('22222222-0000-4000-8000-000000000004', 'cccccccc-1111-4111-8111-cccccccccccc', 'coach'),
+  -- Adult beginner épée
+  ('22222222-0000-4000-8000-000000000007', 'cccccccc-1111-4111-8111-cccccccccccc', 'coach')
 on conflict do nothing;
 
 
@@ -264,23 +273,23 @@ on conflict do nothing;
 -- Three points on each curve, so the trend arrows and the personal bests have
 -- something to be computed from rather than rendering as dashes.
 insert into public.fitness_tests (fencer_id, tested_on, metric, value, unit, recorded_by) values
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'run_5k',        1685, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  90), 'run_5k',        1602, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'run_5k',        1548, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'sprint_100m',   15.8, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'sprint_100m',   15.1, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'lunge_length',   132, 'cm', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  90), 'lunge_length',   139, 'cm', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'lunge_length',   144, 'cm', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'vertical_jump',   41, 'cm', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'advance_retreat_10m', 9.8, 's', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'run_5k',        1425, 's',  'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'lunge_length',   151, 'cm', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'grip_strength',   46, 'kg', 'cccccccc-cccc-cccc-cccc-cccccccccccc')
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'run_5k',        1685, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  90), 'run_5k',        1602, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'run_5k',        1548, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'sprint_100m',   15.8, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'sprint_100m',   15.1, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 180), 'lunge_length',   132, 'cm', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  90), 'lunge_length',   139, 'cm', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'lunge_length',   144, 'cm', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'vertical_jump',   41, 'cm', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date -  14), 'advance_retreat_10m', 9.8, 's', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'run_5k',        1425, 's',  'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'lunge_length',   151, 'cm', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', (current_date -  14), 'grip_strength',   46, 'kg', 'cccccccc-1111-4111-8111-cccccccccccc')
 on conflict do nothing;
 
 -- The sided test, both sides, so the asymmetry has something to show.
 insert into public.fitness_tests (fencer_id, tested_on, metric, value, unit, side, recorded_by) values
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 14), 'single_leg_hop', 412, 'cm', 'right', 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 14), 'single_leg_hop', 361, 'cm', 'left',  'cccccccc-cccc-cccc-cccc-cccccccccccc')
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 14), 'single_leg_hop', 412, 'cm', 'right', 'cccccccc-1111-4111-8111-cccccccccccc'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', (current_date - 14), 'single_leg_hop', 361, 'cm', 'left',  'cccccccc-1111-4111-8111-cccccccccccc')
 on conflict do nothing;

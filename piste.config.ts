@@ -23,21 +23,26 @@ export const clubConfig = {
     // The open-source app name, shared by every club that runs it.
     appName: 'Piste',
     tagline: 'Physical training. Mental training. Data-driven.',
-    clubName: 'Sheshouzuo Fencing Club',
+    clubName: 'Kuou Fencing Club',
     // Short brand name for tight UI (push titles, badges, nav lockup).
-    shortName: 'Sheshouzuo',
+    shortName: 'Kuou',
     // The club's name in its own script. Rendered alongside the Latin name in
-    // the header lockup and on the registration PDF's header. Blank = omit.
-    nativeName: '射手座擊劍會',
-    description: 'Attendance, bouts and competition results for Sheshouzuo Fencing Club',
-    logoAlt: 'Sheshouzuo Fencing Club',
+    // the header lockup. Blank = omit, which is what it does now: the club was
+    // renamed and nobody has said what the characters are. Fill it in and the
+    // lockup picks it up — nothing else needs changing.
+    nativeName: '',
+    description: 'Attendance, bouts and competition results for Kuou Fencing Club',
+    logoAlt: 'Kuou Fencing Club',
   },
 
   // No trailing slashes.
+  // TODO: these followed the old club name and have not been confirmed against
+  // a domain anyone owns. `urls.app` is what share links are built from, so it
+  // has to match the deployed origin before the app goes live.
   urls: {
-    site: 'https://sheshouzuo.tw',
-    app: 'https://app.sheshouzuo.tw',
-    eventPage: 'https://sheshouzuo.tw/#calendar',
+    site: 'https://kuou.tw',
+    app: 'https://app.kuou.tw',
+    eventPage: 'https://kuou.tw/#calendar',
   },
 
   locale: {

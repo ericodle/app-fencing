@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching'
 import { SUPABASE_CACHE, CLEAR_SUPABASE_CACHE_MSG } from './sw-cache-policy'
+import { clubConfig } from '../piste.config'
 
 declare const self: ServiceWorkerGlobalScope
 
@@ -49,7 +50,7 @@ self.addEventListener('push', event => {
   const payload = readPayload(event.data)
 
   event.waitUntil(self.registration.showNotification(
-    payload.title ?? 'Sheshouzuo Fencing Club',
+    payload.title ?? clubConfig.identity.clubName,
     {
       body: payload.body ?? '',
       icon: '/icons/icon-192.png',

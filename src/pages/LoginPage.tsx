@@ -12,9 +12,10 @@ import { Field, inputClass } from '../components/ui/Field'
 // in supabase/seeds/test-users.sql and nowhere else; import.meta.env.DEV keeps
 // the whole block out of a production bundle.
 const DEV_ACCOUNTS = [
-  { label: 'Fencer', email: 'fencer@fencer.fencer', password: 'fencerfencer' },
-  { label: 'Coach',  email: 'coach@coach.coach',    password: 'coachcoach' },
-  { label: 'Admin',  email: 'admin@admin.admin',    password: 'adminadmin' },
+  { label: 'Fencer',     email: 'fencer@fencer.fencer', password: 'fencerfencer' },
+  { label: 'Coach Ku',   email: 'coach@coach.coach',    password: 'coachcoach' },
+  { label: 'Coach Eric', email: 'eric@coach.coach',     password: 'coachcoach' },
+  { label: 'Admin',      email: 'admin@admin.admin',    password: 'adminadmin' },
 ]
 
 export function LoginPage() {

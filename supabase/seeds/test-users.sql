@@ -1,12 +1,13 @@
--- Local-only test users. Runs on every `make reset` (configured in
+-- Local-only test users. Runs on every `npm run db:reset` (configured in
 -- supabase/config.toml's [db.seed] sql_paths). NEVER pushed to the cloud —
--- `make push` only ships migrations from supabase/migrations/.
+-- `npm run db:push` only ships migrations from supabase/migrations/.
 --
 -- Credentials match the DEV_ACCOUNTS list in src/pages/LoginPage.tsx so the
 -- dev one-click login buttons work after every reset:
 --
 --   fencer@fencer.fencer / fencerfencer
---   coach@coach.coach    / coachcoach
+--   coach@coach.coach    / coachcoach     (Coach Ku, saber)
+--   eric@coach.coach     / coachcoach     (Coach Eric, epee)
 --   admin@admin.admin    / adminadmin
 --
 -- Deterministic UUIDs + ON CONFLICT DO NOTHING make this safe to rerun.
@@ -26,7 +27,8 @@ begin
       ('cccccccc-cccc-cccc-cccc-cccccccccccc'::uuid, 'coach@coach.coach',    'coachcoach'),
       ('dddddddd-dddd-dddd-dddd-dddddddddddd'::uuid, 'lefty@fencer.fencer',  'fencerfencer'),
       ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee'::uuid, 'junior@fencer.fencer', 'fencerfencer'),
-      ('ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid, 'pending@fencer.fencer','fencerfencer')
+      ('ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid, 'pending@fencer.fencer','fencerfencer'),
+      ('cccccccc-1111-4111-8111-cccccccccccc'::uuid, 'eric@coach.coach',     'coachcoach')
     ) v(id, email, password)
   loop
     -- GoTrue scans these token columns into non-nullable Go strings, so NULL
@@ -85,19 +87,34 @@ update public.profiles set
   agreed_to_terms_at = now(), agreed_to_terms_version = 1
 where id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
 
+-- The club's two coaches. Coach Ku takes saber, Coach Eric takes epee, and
+-- between them that is the whole coaching staff — which is why the duties rows
+-- below assign every session to one of them by weapon.
 update public.profiles set
-  role = 'coach', status = 'active', name = 'Coach Wu', nickname = 'Wu',
+  role = 'coach', status = 'active', name = 'Coach Ku', nickname = 'Ku',
   date_of_birth = '1981-08-30', handedness = 'left',
   height_cm = 180, arm_span_cm = 186,
-  weapons = array['epee','foil','saber'], primary_weapon = 'saber', grip = 'french',
+  weapons = array['saber'], primary_weapon = 'saber', grip = 'french',
   started_fencing_on = '1996-09-01',
   rating_saber = 'A', rating_saber_year = 2022,
-  rating_epee = 'B', rating_epee_year = 2019,
   referee_qualification = 'National, saber',
   home_label = 'Shilin', home_lat = 25.0880, home_lng = 121.5250,
   travel_mode = 'drive', seats_offered = 3,
   agreed_to_terms_at = now(), agreed_to_terms_version = 1
 where id = 'cccccccc-cccc-cccc-cccc-cccccccccccc';
+
+update public.profiles set
+  role = 'coach', status = 'active', name = 'Coach Eric', nickname = 'Eric',
+  date_of_birth = '1984-02-19', handedness = 'right',
+  height_cm = 178, arm_span_cm = 183,
+  weapons = array['epee'], primary_weapon = 'epee', grip = 'pistol',
+  started_fencing_on = '2003-04-01',
+  rating_epee = 'A', rating_epee_year = 2023,
+  referee_qualification = 'National, epee',
+  home_label = 'Zhongzheng', home_lat = 25.0324, home_lng = 121.5180,
+  travel_mode = 'transit', seats_offered = 0,
+  agreed_to_terms_at = now(), agreed_to_terms_version = 1
+where id = 'cccccccc-1111-4111-8111-cccccccccccc';
 
 -- A left-hander, because the handedness split on the stats page is only
 -- interesting once there is somebody on the other side of it.

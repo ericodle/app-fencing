@@ -196,7 +196,7 @@ describe('coaching notes', () => {
     const { data: note } = await coach.from('member_notes')
       .insert({ member_id: ACCOUNTS.fencer.id, author_id: ACCOUNTS.coach.id, body: 'Good week.' })
       .select().single()
-    expect(note!.author_name).toBe('Coach Wu')
+    expect(note!.author_name).toBe('Coach Ku')
     await service.from('member_notes').delete().eq('id', note!.id)
   })
 })

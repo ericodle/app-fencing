@@ -1,4 +1,4 @@
-name = "sheshouzuo-push"
+name = "kuou-push"
 main = "src/index.ts"
 compatibility_date = "2026-04-01"
 compatibility_flags = ["nodejs_compat"]
@@ -8,7 +8,13 @@ compatibility_flags = ["nodejs_compat"]
 [triggers]
 crons = ["0 22 * * *"]
 
-# Secrets — set with `wrangler secret put`, or `make deploy-push`, which reads
+# Plain configuration, not secrets — safe to commit.
+[vars]
+CLUB_NAME = "Kuou Fencing Club"
+CLUB_TIMEZONE = "Asia/Taipei"
+APP_URL = "https://app.kuou.tw"
+
+# Secrets — set with `wrangler secret put`, or `npm run deploy:push`, which reads
 # them from .env.push. None of them belong in this file.
 #   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT
 #   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY

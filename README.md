@@ -1,6 +1,6 @@
-# Piste — Sheshouzuo Fencing Club
+# Piste — Kuou Fencing Club
 
-**The club app for [Sheshouzuo Fencing Club · 射手座擊劍會](https://sheshouzuo.tw).**
+**The club app for [Kuou Fencing Club](https://kuou.tw).**
 
 Who is coming to practice, where the club should meet, and every bout, result
 and benchmark a fencer accumulates. A progressive web app the club hosts
@@ -69,8 +69,8 @@ git clone git@github.com:ericodle/app-fencing.git
 cd app-fencing
 npm install
 cp .env.example .env.local     # the local values work as shipped
-make start                     # boot Supabase in Docker (first run: a few minutes)
-make dev                       # Vite on http://localhost:5373
+npm run db:start                     # boot Supabase in Docker (first run: a few minutes)
+npm run dev                       # Vite on http://localhost:5373
 ```
 
 Sign in as **`admin@admin.admin` / `adminadmin`** — one of six seeded accounts
@@ -80,10 +80,10 @@ answers spread across five districts, a term of bouts, a competition result and
 a season of benchmarks. Everything has something on it from the first load.
 
 ```sh
-make test        # typecheck + lint + all three suites
-make smoke       # drive the running app in a real browser and screenshot it
-make reset       # wipe the local database back to migrations + seeds
-make help        # everything else
+npm test            # the gate: typecheck + lint + all three suites
+npm run smoke       # drive the running app in a real browser and screenshot it
+npm run db:reset    # wipe the local database back to migrations + seeds
+npm run            # lists every script
 ```
 
 ## Making it yours
@@ -106,8 +106,8 @@ The app runs on one Supabase project and two Cloudflare Workers, both on free
 tiers for a club this size.
 
 ```sh
-make link && make push    # apply migrations to your Supabase project
-make deploy               # build and ship both workers
+npm run db:link && npm run db:push    # apply migrations to your Supabase project
+npm run deploy               # build and ship both workers
 ```
 
 Required environment variables are documented in

@@ -1,10 +1,10 @@
 # Copy to .dev.vars for `wrangler dev`. Gitignored. Production values are set
-# as Worker secrets by `make deploy-push`, which reads them from ../../.env.push.
+# as Worker secrets by `npm run deploy:push`, which reads them from ../../.env.push.
 SUPABASE_URL=http://127.0.0.1:64521
 SUPABASE_SERVICE_ROLE_KEY=
 VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=
-VAPID_SUBJECT=mailto:hello@sheshouzuo.tw
+VAPID_SUBJECT=mailto:hello@kuou.tw
 ADMIN_TRIGGER_SECRET=
 APP_URL=http://localhost:5373
 CLUB_TIMEZONE=Asia/Taipei

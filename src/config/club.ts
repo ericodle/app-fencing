@@ -25,7 +25,7 @@ export interface ClubIdentity {
    *  be WinAnsi-encodable (no CJK) — the PDF renders with jsPDF's built-in
    *  helvetica, which has no CJK glyphs. */
   tagline: string
-  /** This club's full name, e.g. "Sheshouzuo Fencing Club". */
+  /** This club's full name, e.g. "Kuou Fencing Club". */
   clubName: string
   /** Short brand name for tight UI (push titles, badges, the nav lockup). */
   shortName: string

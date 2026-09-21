@@ -5,7 +5,7 @@
 // constraints, triggers and RLS policies are only really tested by trying them,
 // and a mock of a policy is a mock of the developer's belief about the policy.
 //
-// `make start` first. Every one of these files will fail loudly and quickly if
+// `npm run db:start` first. Every one of these files will fail loudly and quickly if
 // the stack is not up, which is the intended way to find that out.
 
 import { beforeAll } from 'vitest'
@@ -22,6 +22,7 @@ export const ACCOUNTS = {
   fencer: { id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', email: 'fencer@fencer.fencer', password: 'fencerfencer' },
   admin:  { id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', email: 'admin@admin.admin',    password: 'adminadmin' },
   coach:  { id: 'cccccccc-cccc-cccc-cccc-cccccccccccc', email: 'coach@coach.coach',    password: 'coachcoach' },
+  eric:   { id: 'cccccccc-1111-4111-8111-cccccccccccc', email: 'eric@coach.coach',     password: 'coachcoach' },
   lefty:  { id: 'dddddddd-dddd-dddd-dddd-dddddddddddd', email: 'lefty@fencer.fencer',  password: 'fencerfencer' },
   junior: { id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', email: 'junior@fencer.fencer', password: 'fencerfencer' },
   pending:{ id: 'ffffffff-ffff-ffff-ffff-ffffffffffff', email: 'pending@fencer.fencer',password: 'fencerfencer' },
@@ -33,7 +34,7 @@ beforeAll(async () => {
   if (!response?.ok) {
     throw new Error(
       `The local Supabase stack is not answering on ${SUPABASE_URL}.\n` +
-      'Run `make start` first — these suites deliberately do not mock the database.',
+      'Run `npm run db:start` first — these suites deliberately do not mock the database.',
     )
   }
 }, 20_000)

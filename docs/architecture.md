@@ -12,8 +12,8 @@
         │  service role
         │
   Cloudflare Workers
-    ├── sheshouzuo-app   serves dist/ with security headers
-    └── sheshouzuo-push  daily cron: open polls, nudge, remind, close
+    ├── kuou-app   serves dist/ with security headers
+    └── kuou-push  daily cron: open polls, nudge, remind, close
 ```
 
 There is **no application server**. The browser talks to PostgREST directly and

@@ -27,6 +27,10 @@ interface Env {
   ADMIN_TRIGGER_SECRET: string
   APP_URL?: string
   CLUB_TIMEZONE?: string
+  // The worker is its own wrangler package and cannot import piste.config.ts,
+  // so the three values it needs from the club's identity arrive as vars. Set
+  // them in wrangler.toml — they are configuration, not secrets.
+  CLUB_NAME?: string
 }
 
 interface Subscription {
@@ -54,7 +58,7 @@ export default {
       }
       const body = await request.json<{ title?: string; body?: string; url?: string }>()
       const sent = await broadcast(env, {
-        title: body.title ?? 'Sheshouzuo Fencing Club',
+        title: body.title ?? clubName(env),
         body: body.body ?? '',
         url: body.url ?? appUrl(env),
       })
@@ -75,7 +79,8 @@ export default {
   },
 }
 
-const appUrl = (env: Env) => env.APP_URL ?? 'https://app.sheshouzuo.tw'
+const appUrl = (env: Env) => env.APP_URL ?? 'https://app.kuou.tw'
+const clubName = (env: Env) => env.CLUB_NAME ?? 'Kuou Fencing Club'
 const timeZone = (env: Env) => env.CLUB_TIMEZONE ?? 'Asia/Taipei'
 
 async function runDailyJob(env: Env) {

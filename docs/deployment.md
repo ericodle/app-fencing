@@ -23,11 +23,11 @@ SUPABASE_POOLER_HOST=       # Settings → Database → Connection string
 Then:
 
 ```sh
-make link
-make push     # applies all six migrations to the cloud project
+npm run db:link
+npm run db:push     # applies all six migrations to the cloud project
 ```
 
-`make push` ships **migrations only**. The seed files under `supabase/seeds/`
+`npm run db:push` ships **migrations only**. The seed files under `supabase/seeds/`
 are local fixtures and never leave the machine — which is deliberate, since they
 contain accounts with published passwords.
 
@@ -45,7 +45,7 @@ npx web-push generate-vapid-keys
 
 The **public** half goes in `.env.production` as `VITE_VAPID_PUBLIC_KEY` (it is
 baked into the bundle and is not a secret). Both halves go in `.env.push`, which
-`make deploy-push` uploads as Worker secrets.
+`npm run deploy:push` uploads as Worker secrets.
 
 Changing the pair later invalidates every existing subscription, so keep it.
 
@@ -56,20 +56,20 @@ In `.env.production`:
 ```
 VITE_SUPABASE_URL=https://YOUR_REF.supabase.co
 VITE_SUPABASE_ANON_KEY=       # Settings → API → anon public
-VITE_PUSH_WORKER_URL=https://sheshouzuo-push.YOUR-SUBDOMAIN.workers.dev
+VITE_PUSH_WORKER_URL=https://kuou-push.YOUR-SUBDOMAIN.workers.dev
 ```
 
 ## Every deploy
 
 ```sh
-make deploy          # both workers
-make deploy-app      # just the SPA
-make deploy-push     # just the cron
+npm run deploy          # both workers
+npm run deploy:app      # just the SPA
+npm run deploy:push     # just the cron
 ```
 
 ## The build gate
 
-`make deploy-app` refuses to produce a bundle that:
+`npm run deploy:app` refuses to produce a bundle that:
 
 - points at `127.0.0.1` or `localhost` — nobody else can reach it
 - points at a non-https URL — an access token would travel in clear
@@ -98,7 +98,7 @@ behind it, not the key. The service-role key bypasses all of them.
 
 ## Custom domain
 
-Point `app.sheshouzuo.tw` at the SPA worker under **Workers → your worker →
+Point `app.kuou.tw` at the SPA worker under **Workers → your worker →
 Settings → Domains & Routes**. Cloudflare issues the certificate. Then set
 `urls.app` in `piste.config.ts` to match, since it is what share links are built
 from.
@@ -106,7 +106,7 @@ from.
 ## Verifying
 
 ```sh
-make verify     # schema drift between local and cloud
+npm run db:verify     # schema drift between local and cloud
 ```
 
 Worth running before every deploy, and the only thing that catches a migration
@@ -116,4 +116,4 @@ somebody applied by hand in the dashboard.
 
 The SPA worker keeps previous versions — roll back from the Cloudflare
 dashboard. **Migrations do not roll back**; a bad one is fixed by a new forward
-migration. `make backup-prod` before anything destructive.
+migration. `npm run db:backup` before anything destructive.
