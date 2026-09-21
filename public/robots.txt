@@ -1,0 +1,5 @@
+# The app is for members, and every page behind the login is already gated by
+# Supabase RLS. There is nothing here worth indexing and a search result that
+# lands a stranger on a sign-in page helps nobody.
+User-agent: *
+Disallow: /

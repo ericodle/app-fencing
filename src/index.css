@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Piste — the brand color seam. This is the one place a fork re-skins the app.
+ *
+ * The palette is Sheshouzuo's: black ground, gold primary, silver secondary,
+ * with blue and green reserved for meaning rather than decoration. It is
+ * carried over from the club's marketing site (site-fencing/css/styles.css)
+ * token for token, so the app and the site read as one thing.
+ *
+ * Three rules the tokens exist to keep, inherited from the site:
+ *
+ *   1. Silver and gold are LIGHT metals. Anything sitting on a gold or silver
+ *      fill takes --color-onyx, not the paper ink. This is the inversion to
+ *      watch: most dark themes put light text on their accent color, and here
+ *      that would be invisible.
+ *   2. --color-gold-deep is the only brand token that cannot carry text on the
+ *      ground: 4.4:1, under AA. Fills only. Everything else clears AA —
+ *      silver 10.8:1, gold 9.4:1, green 9.5:1, blue 7.8:1.
+ *   3. Line work, not light. No glow, no backdrop-filter, no radial atmosphere,
+ *      and no border radius anywhere. Depth comes from drawn geometry, hairline
+ *      rules and overlap. Gold is ink, not a light source.
+ *
+ * The PWA manifest colors live separately in piste.config.ts (theme.themeColor
+ * / theme.backgroundColor) — keep them in step by hand, they are read by
+ * different layers.
+ * ───────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* black — the ground. Neutral, so the two metals read as metal on it. */
+  --color-ink-900: #0a0a0b;
+  --color-ink-800: #101012;
+  --color-ink-700: #17171a;
+  --color-ink-600: #212125;
+  --color-onyx:    #0a0a0b;
+
+  /* gold — primary */
+  --color-gold:        #d4af37;
+  --color-gold-soft:   #e0c25e;
+  --color-gold-bright: #f2d98a;
+  --color-gold-deep:   #8f7320;
+
+  /* silver — secondary */
+  --color-silver:      #b9c0c7;
+  --color-silver-soft: #dfe4e8;
+  --color-silver-deep: #7d858c;
+
+  /* accents: category and status, never decoration */
+  --color-signal-blue:  #5aa9e6;
+  --color-signal-green: #52c98a;
+  --color-signal-amber: #e0a33c;
+  --color-signal-red:   #e0645a;
+
+  /* type */
+  --color-paper:     #ecedef;
+  --color-muted:     #a8aeb5;
+  --color-muted-dim: #7b8189;
+
+  /* structural hairlines — the two rules everything is drawn with */
+  --color-rule:       #3a3a40;
+  --color-rule-faint: #1e1e23;
+
+  --font-display: "Cinzel", "Noto Serif TC", Georgia, serif;
+  --font-body:    "EB Garamond", "Noto Serif TC", Georgia, "Times New Roman", serif;
+  --font-mono:    ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+  /* Every radius is zero. Declared rather than simply unused, so a stray
+     `rounded-lg` from a copied snippet renders square instead of breaking the
+     look silently. */
+  --radius-xs:   0px;
+  --radius-sm:   0px;
+  --radius-md:   0px;
+  --radius-lg:   0px;
+  --radius-xl:   0px;
+  --radius-2xl:  0px;
+  --radius-3xl:  0px;
+  --radius-4xl:  0px;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* A fencing mask is a fine wire grid — the most metal object in the sport,
+     and the one every fencer looks through. Two hairline rulings at a 9px
+     pitch, barely above the black. */
+  --mesh:
+    repeating-linear-gradient(0deg,  rgba(223, 228, 232, 0.030) 0 1px, transparent 1px 9px),
+    repeating-linear-gradient(90deg, rgba(223, 228, 232, 0.030) 0 1px, transparent 1px 9px);
+
+  /* Silver streaks: long diagonal hairlines drawn across the ground, like blade
+     traces or the grain of brushed steel. Five rulings at coprime pitches
+     (231/521, 149/331, 86/211, 59/157, 23/41) with mixed weights, so the set
+     never resolves into an obvious repeat and the surface reads as drawn
+     rather than tiled. */
+  --streaks:
+    repeating-linear-gradient(104deg, transparent 0 231px, rgba(255, 255, 255, 0.075) 231px 233px, transparent 233px 521px),
+    repeating-linear-gradient(104deg, transparent 0 149px, rgba(223, 228, 232, 0.105) 149px 150px, transparent 150px 331px),
+    repeating-linear-gradient(104deg, transparent 0 86px,  rgba(185, 192, 199, 0.080) 86px 87px,  transparent 87px 211px),
+    repeating-linear-gradient(104deg, transparent 0 59px,  rgba(223, 228, 232, 0.055) 59px 60px,  transparent 60px 157px),
+    repeating-linear-gradient(104deg, transparent 0 23px,  rgba(223, 228, 232, 0.030) 23px 24px,  transparent 24px 41px);
+
+  /* Metal is specular: a reflective surface alternates bright and dark bands
+     across its face rather than ramping smoothly. These survive only on thin
+     rules and bars — a 2px edge with a specular ramp reads as a metal edge,
+     where the same ramp across a button face reads as plastic. */
+  --grad-gold:   linear-gradient(135deg, #8f7320 0%, #d4af37 16%, #fbf0c4 32%, #d4af37 46%, #9c7f26 62%, #eed690 80%, #a8862a 100%);
+  --grad-silver: linear-gradient(135deg, #6b7278 0%, #b9c0c7 16%, #ffffff 32%, #c6cdd3 46%, #7d858c 62%, #eef1f4 80%, #8b9298 100%);
+}
+
+html {
+  background: var(--color-ink-900);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  /* A transitional serif has a smaller x-height, so the whole scale is set a
+     step larger than it would be for a sans. Same base as the site. */
+  font-size: clamp(1.05rem, 1rem + 0.25vw, 1.18rem);
+  line-height: 1.6;
+  background-color: var(--color-ink-900);
+  background-image: var(--streaks), var(--mesh);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Plates sit on an opaque ink-800 so the streaks read in the open space
+   between them and never behind body copy. */
+@utility plate {
+  background: var(--color-ink-800);
+  border: 1px solid var(--color-rule-faint);
+  /* A second rule set outside the first: costs nothing and reads as a printed
+     plate border rather than a drop shadow. */
+  outline: 1px solid var(--color-rule-faint);
+  outline-offset: 4px;
+}
+
+/* The specular edge. Two pixels of ramped metal along the top of a plate or
+   panel — the one place the gradients survive. */
+@utility edge-gold {
+  border-top: 2px solid transparent;
+  border-image: var(--grad-gold) 1;
+}
+
+@utility edge-silver {
+  border-top: 2px solid transparent;
+  border-image: var(--grad-silver) 1;
+}
+
+/* Numeric columns — scores, distances, indicators — line up only if the digits
+   are the same width. Tabular figures, not a monospace face, so the text still
+   reads as the same typeface as everything around it. */
+@utility figures {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Focus is drawn, like everything else: a hairline box, not a glow. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* iOS Safari zooms the page when a focused control is under 16px. */
+input, select, textarea {
+  font-size: max(16px, 1rem);
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Chinese sets in a different face and wants a touch more letter-spacing.
+   Stamped on <html> by main.tsx from the configured language. */
+html[data-lang="zh-TW"] body {
+  font-family: "Noto Serif TC", Georgia, serif;
+  letter-spacing: 0.01em;
+}
+html[data-lang="zh-TW"] h1,
+html[data-lang="zh-TW"] h2,
+html[data-lang="zh-TW"] h3 {
+  font-family: "Noto Serif TC", var(--font-display), serif;
+}

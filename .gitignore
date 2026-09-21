@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Secrets — never committed. `.env.example` documents them instead.
+.env
+.env.local
+.env.production
+.env.push
+
+# Catch-all for non-production, non-app material kept locally but out of the
+# repo: proposals, competitor research, scratch notes.
+ignore/
+
+# Wrangler's local build/deploy scratch state.
+.wrangler/
+
+# Supabase CLI scratch space.
+supabase/.temp/
+supabase/.branches/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.sw?
+
+# Local database snapshots
+backups/
+
+# Browser-walk screenshots — for looking at, not for diffing.
+screenshots/

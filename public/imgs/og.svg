@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="shaft" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#8f7320"/><stop offset=".28" stop-color="#d4af37"/><stop offset=".46" stop-color="#fbf0c4"/><stop offset=".62" stop-color="#d4af37"/><stop offset="1" stop-color="#a8862a"/></linearGradient>
+    <linearGradient id="head" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf0c4"/><stop offset=".45" stop-color="#e0c25e"/><stop offset="1" stop-color="#9c7f26"/></linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7d858c"/><stop offset="0.45" stop-color="#ffffff"/><stop offset="1" stop-color="#8b9298"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0b"/>
+
+  <!-- Taiwan, then the arrow across it -->
+  <path d="M878.0 147.0 L889.0 149.0 L914.0 164.0 L908.0 179.0 L906.0 217.0 L901.0 241.0 L889.0 271.0 L877.0 301.0 L870.0 336.0 L866.0 366.0 L853.0 396.0 L835.0 420.0 L823.0 450.0 L817.0 483.0 L807.0 470.0 L795.0 445.0 L780.0 425.0 L764.0 410.0 L755.0 386.0 L748.0 356.0 L746.0 321.0 L752.0 291.0 L771.0 264.0 L786.0 241.0 L807.0 215.0 L823.0 192.0 L835.0 172.0 L848.0 162.0 L865.0 149.0 Z" fill="#17191c"/>
+  <path d="M878.0 147.0 L889.0 149.0 L914.0 164.0 L908.0 179.0 L906.0 217.0 L901.0 241.0 L889.0 271.0 L877.0 301.0 L870.0 336.0 L866.0 366.0 L853.0 396.0 L835.0 420.0 L823.0 450.0 L817.0 483.0 L807.0 470.0 L795.0 445.0 L780.0 425.0 L764.0 410.0 L755.0 386.0 L748.0 356.0 L746.0 321.0 L752.0 291.0 L771.0 264.0 L786.0 241.0 L807.0 215.0 L823.0 192.0 L835.0 172.0 L848.0 162.0 L865.0 149.0 Z" fill="none" stroke="#b9c0c7" stroke-width="2" stroke-linejoin="round" opacity="0.85"/>
+  <g transform="translate(830 315) scale(1.15)">
+    <circle r="185" fill="none" stroke="#ffffff" stroke-opacity="0.09" stroke-width="1.5"/>
+    <circle r="160" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1.5" stroke-dasharray="4 12"/>
+    <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M-110 110 L100 -100" stroke="url(#shaft)" stroke-width="16"/>
+      <path d="M20 -100 H106 V-14" stroke="url(#head)" stroke-width="16"/>
+      <path d="M-48 8 L2 58" stroke="url(#steel)" stroke-width="13"/>
+    </g>
+    <circle cx="-110" cy="110" r="15" fill="#7d858c"/>
+  </g>
+
+  <g font-family="DejaVu Sans, sans-serif">
+    <text x="90" y="214" fill="#d4af37" font-size="26" letter-spacing="7">TAIPEI, TAIWAN  ·  EST. 2019</text>
+    <text x="90" y="300" fill="#ecedef" font-size="66" font-weight="bold" letter-spacing="1">SHESHOUZUO</text>
+    <text x="90" y="374" fill="#ecedef" font-size="66" font-weight="bold" letter-spacing="1">FENCING CLUB</text>
+    <text x="90" y="440" fill="#b9c0c7" font-size="40" font-family="Droid Sans Fallback, sans-serif">射手座擊劍會</text>
+    <text x="90" y="508" fill="#a8aeb5" font-size="27">Physical · Mental · Data-driven</text>
+    <text x="90" y="548" fill="#a8aeb5" font-size="27" font-family="Droid Sans Fallback, sans-serif">身體・心理・數據導向・銳劍　軍刀</text>
+  </g>
+  <rect x="0" y="614" width="1200" height="16" fill="url(#head)"/>
+</svg>

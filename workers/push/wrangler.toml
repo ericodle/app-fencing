@@ -1,0 +1,15 @@
+name = "sheshouzuo-push"
+main = "src/index.ts"
+compatibility_date = "2026-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Once a day, early enough that a poll opened this morning has all day to be
+# answered. 22:00 UTC is 06:00 in Taipei.
+[triggers]
+crons = ["0 22 * * *"]
+
+# Secrets — set with `wrangler secret put`, or `make deploy-push`, which reads
+# them from .env.push. None of them belong in this file.
+#   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT
+#   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+#   ADMIN_TRIGGER_SECRET
