@@ -24,7 +24,7 @@ on conflict (id) do nothing;
 insert into public.contact_channels (channel, label, url, handle, sort_order) values
   ('line',      'LINE',      'https://line.me/R/ti/p/@kuoufencing',      '@kuoufencing',       1),
   ('instagram', 'Instagram', 'https://instagram.com/kuoufencing',        '@kuoufencing',       2),
-  ('email',     'Email',     'mailto:hello@sheshouzuo.tw',               'hello@kuou.tw',3)
+  ('email',     'Email',     'mailto:hello@kuou.tw',                     'hello@kuou.tw',      3)
 on conflict do nothing;
 
 insert into public.terms (version, body, published_at)

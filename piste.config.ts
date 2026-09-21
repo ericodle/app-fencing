@@ -26,11 +26,12 @@ export const clubConfig = {
     clubName: 'Kuou Fencing Club',
     // Short brand name for tight UI (push titles, badges, nav lockup).
     shortName: 'Kuou',
-    // The club's name in its own script. Rendered alongside the Latin name in
-    // the header lockup. Blank = omit, which is what it does now: the club was
-    // renamed and nobody has said what the characters are. Fill it in and the
-    // lockup picks it up — nothing else needs changing.
-    nativeName: '',
+    // The club's name in its own script, rendered under the Latin one in the
+    // header lockup. "擊劍會" is just "fencing club" — the club's own name in
+    // characters has not been settled, and this reads correctly beside "Kuou"
+    // without asserting characters nobody has chosen. The marketing site's
+    // lockup says the same thing. Blank omits the line entirely.
+    nativeName: '擊劍會',
     description: 'Attendance, bouts and competition results for Kuou Fencing Club',
     logoAlt: 'Kuou Fencing Club',
   },
