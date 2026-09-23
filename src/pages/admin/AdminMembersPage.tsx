@@ -8,6 +8,7 @@ import { yearsSince } from '../../lib/ratings'
 import { PageLoading } from '../../components/ui/Spinner'
 import { Plate } from '../../components/ui/Plate'
 import { Button } from '../../components/ui/Button'
+import { AddMemberForm } from '../../components/admin/AddMemberForm'
 import type { Profile, MemberStatus } from '../../types/db'
 
 // The member list, with the applications queue on top.
@@ -26,6 +27,7 @@ export function AdminMembersPage() {
   const [members, setMembers] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
   const isAdmin = profile?.role === 'admin'
 
   const load = useCallback(async () => {
@@ -58,7 +60,16 @@ export function AdminMembersPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-2xl text-gold">{t.admin.members}</h1>
+      <header className="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-display text-2xl text-gold">{t.admin.members}</h1>
+        {isAdmin && (
+          <Button variant={adding ? 'ghost' : 'primary'} onClick={() => setAdding(a => !a)}>
+            {adding ? t.common.close : t.admin.addMember}
+          </Button>
+        )}
+      </header>
+
+      {isAdmin && adding && <AddMemberForm onCreated={() => void load()} />}
 
       {waiting.length > 0 && (
         <Plate title={t.admin.applications} edge="gold">

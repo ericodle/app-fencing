@@ -5,11 +5,12 @@ should pick up first.
 
 ## Not built yet
 
-**Edge functions.** `supabase/functions/` is empty. The app writes everything
-through PostgREST under RLS, which covers every flow it currently has. The two
-that will eventually want a server-side function are public registration
-(creating an account and a booking atomically, with an emailed confirmation) and
-a database export for the shutdown path.
+**More edge functions.** There is one, `create-member`, which lets an admin
+create an account for somebody else — the one flow that needs the service-role
+key. Everything else goes through PostgREST under RLS. The two that will
+eventually want a server-side function are public registration (creating an
+account and a booking atomically, with an emailed confirmation) and a database
+export for the shutdown path.
 
 **Email.** Nothing sends mail except Supabase Auth's own confirmation and
 recovery messages. Booking confirmations and the "your application was approved"

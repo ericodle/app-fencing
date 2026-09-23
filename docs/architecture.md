@@ -8,9 +8,9 @@
         │  PostgREST + GoTrue, directly
         ▼
   Supabase project ──── Postgres, Auth, Row-Level Security
-        ▲
-        │  service role
-        │
+        ▲                        │
+        │  service role          └── Edge Function
+        │                              create-member: an admin makes an account
   Cloudflare Workers
     ├── kuou-app   serves dist/ with security headers
     └── kuou-push  daily cron: open polls, nudge, remind, close
@@ -25,6 +25,11 @@ and what it costs.
 request came from the app, from `curl`, or from a member poking at PostgREST
 with the anon key they found in the bundle. No API layer to keep in step with
 the policies. No server to run, pay for, or patch.
+
+The one exception is creating an account for somebody else, which needs the
+service-role key and so cannot happen in the browser. `supabase/functions/
+create-member` does it, and decides whether the caller may by asking the
+database the same `is_admin()` question every admin policy asks.
 
 **It costs:** every access rule has to be expressible in SQL, evaluated per row.
 Anything that is not — "a coach may edit the venue but not the price" — needs a

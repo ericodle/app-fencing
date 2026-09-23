@@ -184,6 +184,10 @@ export const en = {
     travelMode: 'I usually get there by',
     seatsOffered: 'Seats I can offer when I drive',
     incomplete: 'A few things are still blank',
+    password: 'Password',
+    newPassword: 'New password',
+    changePassword: 'Change password',
+    passwordChanged: 'Password changed. Use the new one next time you sign in.',
   },
   bouts: {
     title: 'Bouts',
@@ -279,6 +283,12 @@ export const en = {
     approve: 'Approve',
     reject: 'Reject',
     reinstate: 'Reinstate',
+    addMember: 'Add a member',
+    addMemberNote: 'The account is active at once. Send them the password yourself; they can change it from their profile.',
+    temporaryPassword: 'Temporary password',
+    generate: 'Generate',
+    createAccount: 'Create account',
+    accountCreated: (name: string) => `Account created for ${name}.`,
   },
   errors: {
     notFound: 'That page does not exist.',

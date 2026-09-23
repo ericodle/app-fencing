@@ -12,6 +12,7 @@ import { Field, inputClass } from '../components/ui/Field'
 import { PageLoading } from '../components/ui/Spinner'
 import { BenchmarkSection } from '../components/profile/BenchmarkSection'
 import { HomeAreaField } from '../components/profile/HomeAreaField'
+import { PasswordSection } from '../components/profile/PasswordSection'
 import type { ProfileUpdate } from '../types/db'
 
 // The member's own record.
@@ -104,255 +105,258 @@ export function ProfilePage() {
   const years = yearsSince(form.started_fencing_on ?? null)
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-display text-2xl text-gold">{t.profile.title}</h1>
-        <div className="flex items-center gap-3">
-          {saved && <span className="text-sm text-signal-green">{t.common.saved}</span>}
-          {error && <span role="alert" className="text-sm text-signal-red">{error}</span>}
-          <Button type="submit" busy={saving}>{t.common.save}</Button>
-        </div>
-      </header>
-
-      <Plate title={t.profile.account}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name" htmlFor="name">
-            <input id="name" className={inputClass} value={form.name ?? ''}
-                   onChange={e => set('name', e.target.value)} />
-          </Field>
-          <Field label="What people call you" htmlFor="nickname">
-            <input id="nickname" className={inputClass} value={form.nickname ?? ''}
-                   onChange={e => set('nickname', e.target.value)} />
-          </Field>
-          <Field
-            label="Date of birth" htmlFor="dob"
-            help={age !== null ? `${age} years old` : 'Competitions are entered by age category.'}
-          >
-            <input id="dob" type="date" className={inputClass} value={form.date_of_birth ?? ''}
-                   onChange={e => set('date_of_birth', e.target.value || null)} />
-          </Field>
-          <Field label="Nationality" htmlFor="nationality">
-            <input id="nationality" className={inputClass} value={form.nationality ?? ''}
-                   onChange={e => set('nationality', e.target.value)} />
-          </Field>
-        </div>
-      </Plate>
-
-      <Plate title={t.profile.athlete} edge="gold">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label={t.profile.handedness} htmlFor="handedness">
-            <select id="handedness" className={inputClass} value={form.handedness ?? ''}
-                    onChange={e => set('handedness', e.target.value || null)}>
-              <option value="">{t.common.notSet}</option>
-              {HANDS.map(h => <option key={h} value={h}>{handednessLabel(h)}</option>)}
-            </select>
-          </Field>
-
-          <Field
-            label={t.profile.startedFencing} htmlFor="started"
-            help={years !== null
-              ? (years === 0 ? t.roster.startedThisYear : t.roster.yearsFencing(years))
-              : 'A date, not a number of years — this one stays right next year.'}
-          >
-            <input id="started" type="date" className={inputClass} value={form.started_fencing_on ?? ''}
-                   onChange={e => set('started_fencing_on', e.target.value || null)} />
-          </Field>
-
-          <Field label={`${t.profile.height} (cm)`} htmlFor="height">
-            <input id="height" type="number" min={50} max={260} step="0.5" className={inputClass}
-                   value={form.height_cm ?? ''}
-                   onChange={e => set('height_cm', e.target.value ? Number(e.target.value) : null)} />
-          </Field>
-
-          <Field
-            label={`${t.profile.armSpan} (cm)`} htmlFor="armspan"
-            help={reach !== null ? t.profile.apeIndex(Math.round(reach)) : t.profile.armSpanHelp}
-          >
-            <input id="armspan" type="number" min={50} max={280} step="0.5" className={inputClass}
-                   value={form.arm_span_cm ?? ''}
-                   onChange={e => set('arm_span_cm', e.target.value ? Number(e.target.value) : null)} />
-          </Field>
-
-          <Field label={`${t.profile.weight} (kg)`} htmlFor="weight">
-            <input id="weight" type="number" min={10} max={300} step="0.1" className={inputClass}
-                   value={form.weight_kg ?? ''}
-                   onChange={e => set('weight_kg', e.target.value ? Number(e.target.value) : null)} />
-          </Field>
-
-          <Field label={t.profile.grip} htmlFor="grip">
-            <select id="grip" className={inputClass} value={form.grip ?? ''}
-                    onChange={e => set('grip', e.target.value || null)}>
-              <option value="">{t.common.notSet}</option>
-              {GRIPS.map(g => <option key={g} value={g}>{g[0].toUpperCase() + g.slice(1)}</option>)}
-            </select>
-          </Field>
-        </div>
-
-        <fieldset className="mt-4 border-t border-rule-faint pt-4">
-          <legend className="font-display text-xs uppercase tracking-widest text-silver">
-            {t.profile.weapons}
-          </legend>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {offeredWeapons.map(w => (
-              <button
-                key={w} type="button" aria-pressed={weapons.includes(w)}
-                onClick={() => toggleWeapon(w)}
-                className={`min-h-11 border px-4 py-2 font-display text-sm uppercase tracking-wide transition-colors ${
-                  weapons.includes(w) ? 'border-gold bg-gold text-onyx' : 'border-rule text-silver hover:border-silver'
-                }`}
-              >
-                {weaponLabel(w)}
-              </button>
-            ))}
+    <div className="flex flex-col gap-6">
+      <form onSubmit={onSubmit} className="flex flex-col gap-6">
+        <header className="flex flex-wrap items-baseline justify-between gap-3">
+          <h1 className="font-display text-2xl text-gold">{t.profile.title}</h1>
+          <div className="flex items-center gap-3">
+            {saved && <span className="text-sm text-signal-green">{t.common.saved}</span>}
+            {error && <span role="alert" className="text-sm text-signal-red">{error}</span>}
+            <Button type="submit" busy={saving}>{t.common.save}</Button>
           </div>
+        </header>
 
-          {weapons.length > 1 && (
-            <Field className="mt-4 max-w-xs" label={t.profile.primaryWeapon} htmlFor="primary">
-              <select id="primary" className={inputClass} value={form.primary_weapon ?? ''}
-                      onChange={e => set('primary_weapon', e.target.value || null)}>
+        <Plate title={t.profile.account}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Name" htmlFor="name">
+              <input id="name" className={inputClass} value={form.name ?? ''}
+                     onChange={e => set('name', e.target.value)} />
+            </Field>
+            <Field label="What people call you" htmlFor="nickname">
+              <input id="nickname" className={inputClass} value={form.nickname ?? ''}
+                     onChange={e => set('nickname', e.target.value)} />
+            </Field>
+            <Field
+              label="Date of birth" htmlFor="dob"
+              help={age !== null ? `${age} years old` : 'Competitions are entered by age category.'}
+            >
+              <input id="dob" type="date" className={inputClass} value={form.date_of_birth ?? ''}
+                     onChange={e => set('date_of_birth', e.target.value || null)} />
+            </Field>
+            <Field label="Nationality" htmlFor="nationality">
+              <input id="nationality" className={inputClass} value={form.nationality ?? ''}
+                     onChange={e => set('nationality', e.target.value)} />
+            </Field>
+          </div>
+        </Plate>
+
+        <Plate title={t.profile.athlete} edge="gold">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label={t.profile.handedness} htmlFor="handedness">
+              <select id="handedness" className={inputClass} value={form.handedness ?? ''}
+                      onChange={e => set('handedness', e.target.value || null)}>
                 <option value="">{t.common.notSet}</option>
-                {weapons.map(w => <option key={w} value={w}>{weaponLabel(w)}</option>)}
+                {HANDS.map(h => <option key={h} value={h}>{handednessLabel(h)}</option>)}
               </select>
             </Field>
-          )}
-        </fieldset>
 
-        {clubConfig.club.ratingSystem !== 'none' && (
+            <Field
+              label={t.profile.startedFencing} htmlFor="started"
+              help={years !== null
+                ? (years === 0 ? t.roster.startedThisYear : t.roster.yearsFencing(years))
+                : 'A date, not a number of years — this one stays right next year.'}
+            >
+              <input id="started" type="date" className={inputClass} value={form.started_fencing_on ?? ''}
+                     onChange={e => set('started_fencing_on', e.target.value || null)} />
+            </Field>
+
+            <Field label={`${t.profile.height} (cm)`} htmlFor="height">
+              <input id="height" type="number" min={50} max={260} step="0.5" className={inputClass}
+                     value={form.height_cm ?? ''}
+                     onChange={e => set('height_cm', e.target.value ? Number(e.target.value) : null)} />
+            </Field>
+
+            <Field
+              label={`${t.profile.armSpan} (cm)`} htmlFor="armspan"
+              help={reach !== null ? t.profile.apeIndex(Math.round(reach)) : t.profile.armSpanHelp}
+            >
+              <input id="armspan" type="number" min={50} max={280} step="0.5" className={inputClass}
+                     value={form.arm_span_cm ?? ''}
+                     onChange={e => set('arm_span_cm', e.target.value ? Number(e.target.value) : null)} />
+            </Field>
+
+            <Field label={`${t.profile.weight} (kg)`} htmlFor="weight">
+              <input id="weight" type="number" min={10} max={300} step="0.1" className={inputClass}
+                     value={form.weight_kg ?? ''}
+                     onChange={e => set('weight_kg', e.target.value ? Number(e.target.value) : null)} />
+            </Field>
+
+            <Field label={t.profile.grip} htmlFor="grip">
+              <select id="grip" className={inputClass} value={form.grip ?? ''}
+                      onChange={e => set('grip', e.target.value || null)}>
+                <option value="">{t.common.notSet}</option>
+                {GRIPS.map(g => <option key={g} value={g}>{g[0].toUpperCase() + g.slice(1)}</option>)}
+              </select>
+            </Field>
+          </div>
+
           <fieldset className="mt-4 border-t border-rule-faint pt-4">
             <legend className="font-display text-xs uppercase tracking-widest text-silver">
-              {t.profile.ratings}
+              {t.profile.weapons}
             </legend>
-            <p className="mt-1 text-sm text-muted-dim">{t.profile.ratingHelp}</p>
-            <div className="mt-3 flex flex-col gap-3">
+            <div className="mt-2 flex flex-wrap gap-2">
               {offeredWeapons.map(w => (
-                <RatingRow
-                  key={w} weapon={w}
-                  letter={form[`rating_${w}` as 'rating_epee'] ?? null}
-                  year={form[`rating_${w}_year` as 'rating_epee_year'] ?? null}
-                  onLetter={v => set(`rating_${w}` as 'rating_epee', v)}
-                  onYear={v => set(`rating_${w}_year` as 'rating_epee_year', v)}
-                />
-              ))}
-            </div>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <Field label="FIE licence" htmlFor="fie">
-                <input id="fie" className={inputClass} value={form.fie_licence_id ?? ''}
-                       onChange={e => set('fie_licence_id', e.target.value)} />
-              </Field>
-              <Field label="National licence" htmlFor="natid">
-                <input id="natid" className={inputClass} value={form.national_licence_id ?? ''}
-                       onChange={e => set('national_licence_id', e.target.value)} />
-              </Field>
-            </div>
-          </fieldset>
-        )}
-
-        <div className="mt-4 grid gap-4 border-t border-rule-faint pt-4">
-          <Field label={t.profile.refereeQualification} htmlFor="ref"
-                 help="Weapon and level, if you hold one. Coaches use this to staff interclubs.">
-            <input id="ref" className={inputClass} value={form.referee_qualification ?? ''}
-                   onChange={e => set('referee_qualification', e.target.value)} />
-          </Field>
-          <Field label={t.profile.competitionNotes} htmlFor="compnotes"
-                 help="Anything the results page does not capture — national squads, years away from the sport, an injury a coach should plan around.">
-            <textarea id="compnotes" rows={3} className={inputClass} value={form.competition_notes ?? ''}
-                      onChange={e => set('competition_notes', e.target.value)} />
-          </Field>
-        </div>
-      </Plate>
-
-      <Plate title={t.profile.travel} edge="silver">
-        <HomeAreaField
-          label={form.home_label ?? ''}
-          lat={form.home_lat === null || form.home_lat === undefined ? null : Number(form.home_lat)}
-          lng={form.home_lng === null || form.home_lng === undefined ? null : Number(form.home_lng)}
-          onChange={(label, lat, lng) => {
-            setForm(prev => ({ ...prev, home_label: label, home_lat: lat, home_lng: lng }))
-            setSaved(false)
-          }}
-        />
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Field label={t.profile.travelMode} htmlFor="travel">
-            <select id="travel" className={inputClass} value={form.travel_mode ?? ''}
-                    onChange={e => set('travel_mode', (e.target.value || null) as TravelMode | null)}>
-              <option value="">{t.common.notSet}</option>
-              {TRAVEL_MODES.map(m => <option key={m} value={m}>{t.travelModes[m]}</option>)}
-            </select>
-          </Field>
-          <Field label={t.profile.seatsOffered} htmlFor="seats"
-                 help="0 if you never drive. Shown when a session needs a carpool.">
-            <input id="seats" type="number" min={0} max={8} className={inputClass}
-                   value={form.seats_offered ?? 0}
-                   onChange={e => set('seats_offered', Number(e.target.value))} />
-          </Field>
-        </div>
-      </Plate>
-
-      <Plate title={t.profile.kit}>
-        <fieldset>
-          <legend className="sr-only">Kit I own</legend>
-          <div className="flex flex-wrap gap-2">
-            {clubConfig.club.equipmentItems.map(item => {
-              const owned = ((form.equipment_owned ?? []) as string[]).includes(item)
-              return (
                 <button
-                  key={item} type="button" aria-pressed={owned}
-                  onClick={() => {
-                    const current = (form.equipment_owned ?? []) as string[]
-                    set('equipment_owned', owned ? current.filter(i => i !== item) : [...current, item])
-                  }}
-                  className={`min-h-11 border px-3 py-1.5 text-sm transition-colors ${
-                    owned ? 'border-silver bg-silver text-onyx' : 'border-rule text-silver hover:border-silver'
+                  key={w} type="button" aria-pressed={weapons.includes(w)}
+                  onClick={() => toggleWeapon(w)}
+                  className={`min-h-11 border px-4 py-2 font-display text-sm uppercase tracking-wide transition-colors ${
+                    weapons.includes(w) ? 'border-gold bg-gold text-onyx' : 'border-rule text-silver hover:border-silver'
                   }`}
                 >
-                  {item}
+                  {weaponLabel(w)}
                 </button>
-              )
-            })}
+              ))}
+            </div>
+
+            {weapons.length > 1 && (
+              <Field className="mt-4 max-w-xs" label={t.profile.primaryWeapon} htmlFor="primary">
+                <select id="primary" className={inputClass} value={form.primary_weapon ?? ''}
+                        onChange={e => set('primary_weapon', e.target.value || null)}>
+                  <option value="">{t.common.notSet}</option>
+                  {weapons.map(w => <option key={w} value={w}>{weaponLabel(w)}</option>)}
+                </select>
+              </Field>
+            )}
+          </fieldset>
+
+          {clubConfig.club.ratingSystem !== 'none' && (
+            <fieldset className="mt-4 border-t border-rule-faint pt-4">
+              <legend className="font-display text-xs uppercase tracking-widest text-silver">
+                {t.profile.ratings}
+              </legend>
+              <p className="mt-1 text-sm text-muted-dim">{t.profile.ratingHelp}</p>
+              <div className="mt-3 flex flex-col gap-3">
+                {offeredWeapons.map(w => (
+                  <RatingRow
+                    key={w} weapon={w}
+                    letter={form[`rating_${w}` as 'rating_epee'] ?? null}
+                    year={form[`rating_${w}_year` as 'rating_epee_year'] ?? null}
+                    onLetter={v => set(`rating_${w}` as 'rating_epee', v)}
+                    onYear={v => set(`rating_${w}_year` as 'rating_epee_year', v)}
+                  />
+                ))}
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <Field label="FIE licence" htmlFor="fie">
+                  <input id="fie" className={inputClass} value={form.fie_licence_id ?? ''}
+                         onChange={e => set('fie_licence_id', e.target.value)} />
+                </Field>
+                <Field label="National licence" htmlFor="natid">
+                  <input id="natid" className={inputClass} value={form.national_licence_id ?? ''}
+                         onChange={e => set('national_licence_id', e.target.value)} />
+                </Field>
+              </div>
+            </fieldset>
+          )}
+
+          <div className="mt-4 grid gap-4 border-t border-rule-faint pt-4">
+            <Field label={t.profile.refereeQualification} htmlFor="ref"
+                   help="Weapon and level, if you hold one. Coaches use this to staff interclubs.">
+              <input id="ref" className={inputClass} value={form.referee_qualification ?? ''}
+                     onChange={e => set('referee_qualification', e.target.value)} />
+            </Field>
+            <Field label={t.profile.competitionNotes} htmlFor="compnotes"
+                   help="Anything the results page does not capture — national squads, years away from the sport, an injury a coach should plan around.">
+              <textarea id="compnotes" rows={3} className={inputClass} value={form.competition_notes ?? ''}
+                        onChange={e => set('competition_notes', e.target.value)} />
+            </Field>
           </div>
-        </fieldset>
-        <div className="mt-4 grid gap-4 sm:grid-cols-4">
-          <Field label="Glove" htmlFor="glove">
-            <input id="glove" className={inputClass} value={form.glove_size ?? ''}
-                   onChange={e => set('glove_size', e.target.value)} />
-          </Field>
-          <Field label="Jacket" htmlFor="jacket">
-            <input id="jacket" className={inputClass} value={form.jacket_size ?? ''}
-                   onChange={e => set('jacket_size', e.target.value)} />
-          </Field>
-          <Field label="Shoes" htmlFor="shoes">
-            <input id="shoes" className={inputClass} value={form.shoe_size ?? ''}
-                   onChange={e => set('shoe_size', e.target.value)} />
-          </Field>
-          <Field label="Blade" htmlFor="blade" help="0 or 5.">
-            <input id="blade" className={inputClass} value={form.blade_size ?? ''}
-                   onChange={e => set('blade_size', e.target.value)} />
-          </Field>
-        </div>
-      </Plate>
+        </Plate>
 
-      <Plate title={t.profile.emergency}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Who to call" htmlFor="ecname">
-            <input id="ecname" className={inputClass} value={form.emergency_contact_name ?? ''}
-                   onChange={e => set('emergency_contact_name', e.target.value)} />
-          </Field>
-          <Field label="Their number" htmlFor="ecphone">
-            <input id="ecphone" type="tel" className={inputClass} value={form.emergency_contact_phone ?? ''}
-                   onChange={e => set('emergency_contact_phone', e.target.value)} />
-          </Field>
-        </div>
-        <Field className="mt-4" label="Anything a coach should know" htmlFor="medical"
-               help="Asthma, an old injury, a medication. Seen by coaches only — never on the roster.">
-          <textarea id="medical" rows={2} className={inputClass} value={form.medical_notes ?? ''}
-                    onChange={e => set('medical_notes', e.target.value)} />
-        </Field>
-      </Plate>
+        <Plate title={t.profile.travel} edge="silver">
+          <HomeAreaField
+            label={form.home_label ?? ''}
+            lat={form.home_lat === null || form.home_lat === undefined ? null : Number(form.home_lat)}
+            lng={form.home_lng === null || form.home_lng === undefined ? null : Number(form.home_lng)}
+            onChange={(label, lat, lng) => {
+              setForm(prev => ({ ...prev, home_label: label, home_lat: lat, home_lng: lng }))
+              setSaved(false)
+            }}
+          />
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Field label={t.profile.travelMode} htmlFor="travel">
+              <select id="travel" className={inputClass} value={form.travel_mode ?? ''}
+                      onChange={e => set('travel_mode', (e.target.value || null) as TravelMode | null)}>
+                <option value="">{t.common.notSet}</option>
+                {TRAVEL_MODES.map(m => <option key={m} value={m}>{t.travelModes[m]}</option>)}
+              </select>
+            </Field>
+            <Field label={t.profile.seatsOffered} htmlFor="seats"
+                   help="0 if you never drive. Shown when a session needs a carpool.">
+              <input id="seats" type="number" min={0} max={8} className={inputClass}
+                     value={form.seats_offered ?? 0}
+                     onChange={e => set('seats_offered', Number(e.target.value))} />
+            </Field>
+          </div>
+        </Plate>
 
-      {/* Benchmarks save themselves — they are rows in their own log, not
-          columns on this form, so they do not wait for the Save button. */}
-      {clubConfig.features.fitnessTests && <BenchmarkSection memberId={profile.id} />}
-    </form>
+        <Plate title={t.profile.kit}>
+          <fieldset>
+            <legend className="sr-only">Kit I own</legend>
+            <div className="flex flex-wrap gap-2">
+              {clubConfig.club.equipmentItems.map(item => {
+                const owned = ((form.equipment_owned ?? []) as string[]).includes(item)
+                return (
+                  <button
+                    key={item} type="button" aria-pressed={owned}
+                    onClick={() => {
+                      const current = (form.equipment_owned ?? []) as string[]
+                      set('equipment_owned', owned ? current.filter(i => i !== item) : [...current, item])
+                    }}
+                    className={`min-h-11 border px-3 py-1.5 text-sm transition-colors ${
+                      owned ? 'border-silver bg-silver text-onyx' : 'border-rule text-silver hover:border-silver'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                )
+              })}
+            </div>
+          </fieldset>
+          <div className="mt-4 grid gap-4 sm:grid-cols-4">
+            <Field label="Glove" htmlFor="glove">
+              <input id="glove" className={inputClass} value={form.glove_size ?? ''}
+                     onChange={e => set('glove_size', e.target.value)} />
+            </Field>
+            <Field label="Jacket" htmlFor="jacket">
+              <input id="jacket" className={inputClass} value={form.jacket_size ?? ''}
+                     onChange={e => set('jacket_size', e.target.value)} />
+            </Field>
+            <Field label="Shoes" htmlFor="shoes">
+              <input id="shoes" className={inputClass} value={form.shoe_size ?? ''}
+                     onChange={e => set('shoe_size', e.target.value)} />
+            </Field>
+            <Field label="Blade" htmlFor="blade" help="0 or 5.">
+              <input id="blade" className={inputClass} value={form.blade_size ?? ''}
+                     onChange={e => set('blade_size', e.target.value)} />
+            </Field>
+          </div>
+        </Plate>
+
+        <Plate title={t.profile.emergency}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Who to call" htmlFor="ecname">
+              <input id="ecname" className={inputClass} value={form.emergency_contact_name ?? ''}
+                     onChange={e => set('emergency_contact_name', e.target.value)} />
+            </Field>
+            <Field label="Their number" htmlFor="ecphone">
+              <input id="ecphone" type="tel" className={inputClass} value={form.emergency_contact_phone ?? ''}
+                     onChange={e => set('emergency_contact_phone', e.target.value)} />
+            </Field>
+          </div>
+          <Field className="mt-4" label="Anything a coach should know" htmlFor="medical"
+                 help="Asthma, an old injury, a medication. Seen by coaches only — never on the roster.">
+            <textarea id="medical" rows={2} className={inputClass} value={form.medical_notes ?? ''}
+                      onChange={e => set('medical_notes', e.target.value)} />
+          </Field>
+        </Plate>
+
+        {/* Benchmarks save themselves — they are rows in their own log, not
+            columns on this form, so they do not wait for the Save button. */}
+        {clubConfig.features.fitnessTests && <BenchmarkSection memberId={profile.id} />}
+      </form>
+      <PasswordSection />
+    </div>
   )
 }
 

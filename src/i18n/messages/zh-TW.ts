@@ -183,6 +183,10 @@ export const zhTW: Messages = {
     travelMode: '我通常的交通方式',
     seatsOffered: '我開車時可以提供的座位',
     incomplete: '還有幾項沒填',
+    password: '密碼',
+    newPassword: '新密碼',
+    changePassword: '更改密碼',
+    passwordChanged: '密碼已更改，下次登入請使用新密碼。',
   },
   bouts: {
     title: '對打紀錄',
@@ -278,6 +282,12 @@ export const zhTW: Messages = {
     approve: '通過',
     reject: '婉拒',
     reinstate: '恢復',
+    addMember: '新增會員',
+    addMemberNote: '帳號建立後立即啟用。請自行將密碼傳給對方，對方可在個人資料中更改。',
+    temporaryPassword: '臨時密碼',
+    generate: '產生',
+    createAccount: '建立帳號',
+    accountCreated: (name: string) => `已為 ${name} 建立帳號。`,
   },
   errors: {
     notFound: '找不到這個頁面。',

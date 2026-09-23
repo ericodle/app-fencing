@@ -25,6 +25,7 @@ Then:
 ```sh
 npm run db:push     # applies all six migrations to the cloud project
 npm run db:auth     # points Auth's Site URL and redirect allow list at urls.app
+npm run deploy:functions   # ships supabase/functions (create-member)
 ```
 
 A new project's Site URL is `http://localhost:3000`, so until `npm run db:auth`
@@ -72,6 +73,7 @@ VITE_PUSH_WORKER_URL=https://kuou-push.YOUR-SUBDOMAIN.workers.dev
 npm run deploy          # both workers
 npm run deploy:app      # just the SPA
 npm run deploy:push     # just the cron
+npm run deploy:functions  # the edge functions, when one has changed
 ```
 
 ## The build gate
