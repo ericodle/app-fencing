@@ -10,7 +10,7 @@
     "@block65/webcrypto-web-push": "^1.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250204.0",
-    "wrangler": "^4.107.0"
+    "@cloudflare/workers-types": "^5.20260922.1",
+    "wrangler": "^4.136.3"
   }
 }

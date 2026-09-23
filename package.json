@@ -30,7 +30,7 @@
     "db:backup": "node scripts/backup-db.mjs",
     "deploy": "npm run deploy:app && npm run deploy:push",
     "deploy:app": "npm run build && dotenv -e .env.production -- wrangler deploy",
-    "deploy:push": "cd workers/push && npx dotenv -e ../../.env.production -- npx wrangler deploy --secrets-file ../../.env.push",
+    "deploy:push": "cd workers/push && npm ci --no-audit --no-fund && npx dotenv -e ../../.env.production -- npx wrangler deploy --secrets-file ../../.env.push",
     "deploy:functions": "dotenv -e .env.local -- sh -c 'node scripts/supabase.mjs functions deploy --project-ref \"$SUPABASE_PROJECT_REF\"'"
   },
   "dependencies": {

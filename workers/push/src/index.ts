@@ -238,7 +238,7 @@ async function push(env: Env, sub: Subscription, notification: Omit<Notification
         }),
         options: { ttl: 60 * 60 * 20 },
       },
-      { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+      { endpoint: sub.endpoint, expirationTime: null, keys: { p256dh: sub.p256dh, auth: sub.auth } },
       { subject: env.VAPID_SUBJECT, publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY },
     )
     const response = await fetch(sub.endpoint, payload)
