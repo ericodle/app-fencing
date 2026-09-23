@@ -109,15 +109,14 @@ tiers for a club this size.
 npm run db:push           # apply new migrations to the cloud database
 npm run db:verify         # schema drift between local and cloud
 npm run db:auth           # point Auth's Site URL and redirect list at urls.app
-npm run deploy:functions  # ship the Supabase edge functions (create-member)
-npm run deploy            # build and ship both workers
+npm run deploy            # edge functions, then both workers
+npm run deploy:functions  # just the Supabase edge functions (create-member)
 npm run deploy:app        # just the app worker
 npm run deploy:push       # just the push cron worker
 npm run db:backup         # snapshot the cloud database before a risky migration
 ```
 
-A typical release is `npm run db:push && npm run deploy:functions && npm run
-deploy`. Migrations go first because the app may depend on them; `db:push`
+A typical release is `npm run db:push && npm run deploy`. Migrations go first because the app may depend on them; `db:push`
 applies only migrations the cloud has not seen, so it is safe to run every
 time. The Supabase commands read the cloud project's credentials — including
 `SUPABASE_ACCESS_TOKEN`, a personal access token from the account that owns the
