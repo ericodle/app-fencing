@@ -16,6 +16,8 @@ import { METRIC_KEYS } from '../../src/lib/fitness-metrics'
 // renders, with no error anywhere. See the note in src/types/db.ts.
 
 type Client = SupabaseClient<Database>
+// The seeded drop-in price tier.
+const DROP_IN = '66666666-0000-4000-8000-000000000001'
 const service = serviceClient()
 let fencer: Client
 let admin: Client
@@ -90,19 +92,22 @@ describe('events', () => {
 
   it('does not let a coach change what a session IS', async () => {
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'cross_training', admin_title: 'Not the coach\u2019s to rename', start_date: '2026-12-16', price: 400 })
+      .insert({ kind: 'cross_training', admin_title: 'Not the coach\u2019s to rename', start_date: '2026-12-16', price_id: DROP_IN })
       .select().single()
     created.push({ table: 'events', id: event!.id })
 
     const coachClient = await clientFor('coach')
-    for (const patch of [{ price: 0 }, { admin_title: 'Free now' }, { capacity: 999 }, { start_date: '2027-01-01' }]) {
+    for (const patch of [
+      { price_id: null }, { admin_title: 'Free now' }, { capacity: 999 }, { start_date: '2027-01-01' },
+      { registration_open: false }, { cancel_date: '2026-12-01' },
+    ]) {
       const { error } = await coachClient.from('events').update(patch).eq('id', event!.id)
       expect(error?.message, `coach changed ${Object.keys(patch)[0]}`).toMatch(/admin change/)
     }
 
     const { data: after } = await service.from('events')
-      .select('price, admin_title, capacity').eq('id', event!.id).single()
-    expect(Number(after!.price)).toBe(400)
+      .select('price_id, admin_title, capacity').eq('id', event!.id).single()
+    expect(after!.price_id).toBe(DROP_IN)
   })
 
   it('insists a course has a day list', async () => {
@@ -332,44 +337,8 @@ describe('passes', () => {
   })
 })
 
-describe('waiver signatures', () => {
-  it('cannot be changed once made', async () => {
-    const { data: waiver } = await service.from('waivers').select('id, body').limit(1).single()
-
-    // Scoped to a throwaway event, which is what makes this test repeatable.
-    // A signature cannot be deleted — by anyone, including the service role,
-    // which is the property being asserted — so there is no cleaning up after
-    // it, and a club-wide signature would collide with the one the previous
-    // run left behind. That collision is the constraint working; it is just
-    // not the constraint this test is about.
-    const { data: event } = await admin.from('events')
-      .insert({ kind: 'practice', admin_title: 'Signature test', start_date: '2026-12-10' })
-      .select().single()
-    created.push({ table: 'events', id: event!.id })
-
-    const { data: signature, error: signError } = await service.from('waiver_signatures').insert({
-      waiver_id: waiver!.id, member_id: ACCOUNTS.fencer.id, event_id: event!.id,
-      signed_name: 'Mei Lin', body_snapshot: waiver!.body,
-    }).select().single()
-    expect(signError).toBeNull()
-
-    const updated = await service.from('waiver_signatures')
-      .update({ signed_name: 'Somebody Else' }).eq('id', signature!.id)
-    expect(updated.error?.message).toMatch(/cannot be changed/)
-
-    // Not even a delete, and not even as the service role. A signature that can
-    // be revised after the fact is not evidence of anything.
-    const deleted = await service.from('waiver_signatures').delete().eq('id', signature!.id)
-    expect(deleted.error?.message).toMatch(/cannot be changed/)
-
-    // It still carries the wording as it stood when it was signed, which is
-    // what makes it evidence of anything: `waiver_id` alone points at whatever
-    // the waivers row says today.
-    const { data: kept } = await service.from('waiver_signatures')
-      .select('body_snapshot').eq('id', signature!.id).single()
-    expect(kept!.body_snapshot).toBe(waiver!.body)
-  })
-})
+// Waiver signatures, including that one cannot be changed once made, are in
+// waivers.test.ts.
 
 describe('the vocabularies match the app', () => {
   it('accepts every event kind the app knows', async () => {

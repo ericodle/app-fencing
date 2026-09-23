@@ -13,6 +13,7 @@ import { PageLoading } from '../components/ui/Spinner'
 import { BenchmarkSection } from '../components/profile/BenchmarkSection'
 import { HomeAreaField } from '../components/profile/HomeAreaField'
 import { PasswordSection } from '../components/profile/PasswordSection'
+import { WaiversSection } from '../components/profile/WaiversSection'
 import type { ProfileUpdate } from '../types/db'
 
 // The member's own record.
@@ -355,6 +356,8 @@ export function ProfilePage() {
             columns on this form, so they do not wait for the Save button. */}
         {clubConfig.features.fitnessTests && <BenchmarkSection memberId={profile.id} />}
       </form>
+      <WaiversSection memberId={profile.id} memberName={profile.name ?? ''}
+                      isMinor={!!profile.parent_account || (age !== null && age < 18)} />
       <PasswordSection />
     </div>
   )

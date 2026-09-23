@@ -16,17 +16,17 @@ export for the shutdown path.
 recovery messages. Booking confirmations and the "your application was approved"
 note are currently a coach sending a LINE message.
 
+**What the registration port left out.** Registration, deposits, the payment
+ledger, cancellation credit and waivers follow the dive-shop app closely (see
+`docs/data-model.md`). Not carried over yet: per-event waiver overrides
+(require or exempt one waiver on one event), a PDF export of signatures for a
+lawyer, payment reminders from the push worker, and an admin screen for the
+club's contact details, which are still set by a migration or SQL.
+
 **Carpool UI.** `vehicles`, `event_rides` and `ride_seats` exist, with their
 constraints and the seat-waitlist trigger, and RSVP answers already carry
 "I can drive, N seats" and "I need a lift" — the tally surfaces both. What is
 missing is the screen that turns those intentions into assignments.
-
-**Bookings UI.** The `bookings` table, its capacity trigger, the waitlist
-behavior and the money guard are all in place and tested; the member-facing
-register-for-a-course flow is not. Term courses are currently taken by message.
-
-**Payments and passes UI.** Same: the ledger, the pass balance view and the
-punch guard are built and tested. The admin screen to take a payment is not.
 
 **Push subscription UI.** The service worker handles `push` and
 `notificationclick`, the worker sends, the de-duplication table works. Nothing
@@ -62,8 +62,9 @@ add — push, home screen, offline shell — it already has.
    nobody. This is the largest gap between what is built and what is usable.
 2. **The carpool screen.** The data is there and the intentions are being
    collected every week; they just cannot be acted on in the app.
-3. **Bookings for courses.** The term intake is the one flow that is still
-   entirely manual.
+3. **Passes at the door.** Punch cards are modeled and guarded but not yet
+   connected to registration: a member with a ten-session card still pays per
+   event.
 4. **Component tests for `BoutForm` and `MeetupPanel`.**
 5. **A club-ladder page** — `eloHistory` is written and tested, and nothing
    renders it.

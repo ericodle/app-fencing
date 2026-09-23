@@ -10,7 +10,7 @@
 
 import { supabase } from './supabase'
 import { usesCourseDays, type EventKind } from './event-kinds'
-import { todayInClub } from './dates'
+import { todayInClub, parseDate } from './dates'
 import type { EventRow, Venue } from '../types/db'
 
 export interface EventWithVenue extends EventRow {
@@ -129,5 +129,22 @@ export async function fetchMonth(year: number, month: number): Promise<EventWith
   return rows
     .filter(e => (seen.has(e.id) ? false : (seen.add(e.id), true)))
     .filter(e => eventDays(e).some(d => d >= from && d <= to))
+    .sort(byWhen)
+}
+
+/** What the admin's events list shows: everything from the last few weeks on,
+ *  cancelled ones included — a cancelled event is still somewhere refunds are
+ *  settled, and the only place it can be restored from. */
+export async function fetchForAdmin(sinceDays = 30): Promise<EventWithVenue[]> {
+  const since = new Date(parseDate(todayInClub()).getTime() - sinceDays * 86_400_000).toISOString().slice(0, 10)
+  const [dated, courses] = await Promise.all([
+    supabase.from('events').select(SELECT).gte('start_date', since).order('start_date'),
+    supabase.from('events').select(SELECT).not('course_days', 'is', null),
+  ])
+  const rows = [...(dated.data ?? []), ...(courses.data ?? [])] as EventWithVenue[]
+  const seen = new Set<string>()
+  return rows
+    .filter(e => (seen.has(e.id) ? false : (seen.add(e.id), true)))
+    .filter(e => (lastDay(e) ?? '') >= since)
     .sort(byWhen)
 }

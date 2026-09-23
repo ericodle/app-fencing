@@ -16,9 +16,10 @@ import { Plate } from '../components/ui/Plate'
 import { Button } from '../components/ui/Button'
 import { PollPanel } from '../components/attendance/PollPanel'
 import { MeetupPanel } from '../components/meetup/MeetupPanel'
+import { RegisterPanel } from '../components/register/RegisterPanel'
 
-// One session: what it is, who is coming, and — for the kinds whose venue is
-// actually negotiable — where the club should meet.
+// One event: what it is, signing up for it, who is coming, and — for the
+// kinds whose venue is actually negotiable — where the club should meet.
 //
 // The meetup planner is shown only when `venueIsNegotiable(kind)`. A tournament
 // is at the organizer's hall and a course is in the club's own salle; neither
@@ -198,13 +199,6 @@ export function EventDetailPage() {
               <span className="figures">{event.capacity}</span>
             </Detail>
           )}
-          {event.price !== null && (
-            <Detail label="Price">
-              <span className="figures">
-                {event.price} {event.currency ?? clubConfig.locale.currency}
-              </span>
-            </Detail>
-          )}
         </dl>
 
         {event.notes && <p className="mt-4 border-t border-rule-faint pt-4 text-muted">{event.notes}</p>}
@@ -215,6 +209,14 @@ export function EventDetailPage() {
           <p className="mt-2 text-sm text-muted-dim"><strong className="text-silver">You need:</strong> {event.prereqs}</p>
         )}
       </Plate>
+
+      {profile && <RegisterPanel event={event} profile={profile} />}
+
+      {isStaff && (
+        <Link to={`/manage/events/${event.id}`} className="-mt-3 self-start text-sm text-gold hover:text-gold-soft">
+          {t.admin.registrations} →
+        </Link>
+      )}
 
       {clubConfig.features.attendancePolls && pollsAttendance(kind) && (
         poll ? (
@@ -228,7 +230,7 @@ export function EventDetailPage() {
           />
         ) : isStaff ? (
           <Plate title={t.poll.title}>
-            <p className="text-muted">No poll has been opened for this session yet.</p>
+            <p className="text-muted">No poll has been opened for this event yet.</p>
             <Button className="mt-3" onClick={() => void openPoll()}>{t.poll.open}</Button>
           </Plate>
         ) : null

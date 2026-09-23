@@ -17,18 +17,19 @@ interface Counts {
   openPolls: number
   upcoming: number
   discounts: number
+  money: number
 }
 
 export function ManagePage() {
   const { profile } = useAuth()
-  const [counts, setCounts] = useState<Counts>({ applications: 0, openPolls: 0, upcoming: 0, discounts: 0 })
+  const [counts, setCounts] = useState<Counts>({ applications: 0, openPolls: 0, upcoming: 0, discounts: 0, money: 0 })
   const isAdmin = profile?.role === 'admin'
 
   useEffect(() => {
     let cancelled = false
     void (async () => {
       const today = new Date().toISOString().slice(0, 10)
-      const [apps, polls, events, discounts] = await Promise.all([
+      const [apps, polls, events, discounts, refunds, unsettled] = await Promise.all([
         supabase.from('profiles').select('id', { count: 'exact', head: true })
           .in('status', ['pending', 'on_hold']),
         supabase.from('attendance_polls').select('id', { count: 'exact', head: true })
@@ -37,6 +38,10 @@ export function ManagePage() {
           .gte('start_date', today).is('cancelled_at', null),
         supabase.from('booking_discounts').select('id', { count: 'exact', head: true })
           .eq('status', 'requested'),
+        supabase.from('bookings').select('id', { count: 'exact', head: true })
+          .not('refund_requested_at', 'is', null).neq('status', 'cancelled'),
+        supabase.from('booking_balances').select('booking_id', { count: 'exact', head: true })
+          .gt('unsettled', 0),
       ])
       if (cancelled) return
       setCounts({
@@ -44,6 +49,9 @@ export function ManagePage() {
         openPolls: polls.count ?? 0,
         upcoming: events.count ?? 0,
         discounts: discounts.count ?? 0,
+        // Refund requests and cancelled money nobody has decided about: the
+        // two things on the payments page that are waiting on a person.
+        money: (refunds.count ?? 0) + (unsettled.count ?? 0),
       })
     })()
     return () => { cancelled = true }
@@ -51,10 +59,12 @@ export function ManagePage() {
 
   const cards = [
     { to: '/manage/members',    label: t.admin.members,  count: counts.applications, note: 'Approve applications, change roles, put an account on hold.' },
-    { to: '/manage/events',     label: t.admin.events,   count: counts.upcoming,     note: 'Put sessions, courses and competitions on the calendar.' },
+    { to: '/manage/events',     label: t.admin.events,   count: counts.upcoming,     note: 'Put events on the calendar, and see who registered and paid.' },
     { to: '/manage/attendance', label: t.admin.polls,    count: counts.openPolls,    note: 'Open a poll, see who is coming, decide where to meet.' },
+    { to: '/manage/payments',   label: t.admin.payments, count: counts.money,        note: 'Who still owes, refund requests, and money to settle.' },
     { to: '/manage/venues',     label: t.admin.venues,   count: 0, adminOnly: true,  note: 'The places the club fences, and their coordinates.' },
-    { to: '/manage/prices',     label: t.admin.prices,   count: counts.discounts, adminOnly: true, note: 'What the club charges, and the discounts it grants.' },
+    { to: '/manage/prices',     label: t.admin.prices,   count: counts.discounts, adminOnly: true, note: 'Price tiers and deposits, cancellation policies, payment methods, discounts.' },
+    { to: '/manage/waivers',    label: t.admin.waivers,  count: 0, adminOnly: true,  note: 'The waivers members sign before registering, and the terms of use.' },
     { to: '/manage/audit',      label: t.admin.audit,    count: 0, adminOnly: true,  note: 'Every privileged write, appended and unalterable.' },
   ].filter(card => !card.adminOnly || isAdmin)
 

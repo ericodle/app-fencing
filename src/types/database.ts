@@ -260,6 +260,69 @@ export type Database = {
           },
         ]
       }
+      booking_amendments: {
+        Row: {
+          amount: number
+          booking_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string
+        }
+        Insert: {
+          amount: number
+          booking_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_amendments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking_balances"
+            referencedColumns: ["booking_id"]
+          },
+          {
+            foreignKeyName: "booking_amendments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_amendments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "booking_amendments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_amendments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       booking_discounts: {
         Row: {
           booking_id: string
@@ -292,6 +355,13 @@ export type Database = {
           status?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "booking_discounts_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking_balances"
+            referencedColumns: ["booking_id"]
+          },
           {
             foreignKeyName: "booking_discounts_booking_id_fkey"
             columns: ["booking_id"]
@@ -332,53 +402,116 @@ export type Database = {
       bookings: {
         Row: {
           amount_due: number
-          amount_paid: number
+          cancellation_settled_at: string | null
+          cancellation_settled_by: string | null
+          cancellation_settled_note: string | null
           cancelled_at: string | null
+          cancelled_by: string | null
           created_at: string
           created_by: string | null
+          deposit: number | null
           event_id: string
           id: string
           loaner_kit: string[]
           member_id: string
           notes: string | null
           payer_id: string | null
+          policy_acked_at: string | null
+          refund_requested_at: string | null
           status: string
+          status_before_event_cancel: string | null
           updated_at: string
           weapon: string | null
         }
         Insert: {
           amount_due?: number
-          amount_paid?: number
+          cancellation_settled_at?: string | null
+          cancellation_settled_by?: string | null
+          cancellation_settled_note?: string | null
           cancelled_at?: string | null
+          cancelled_by?: string | null
           created_at?: string
           created_by?: string | null
+          deposit?: number | null
           event_id: string
           id?: string
           loaner_kit?: string[]
           member_id: string
           notes?: string | null
           payer_id?: string | null
+          policy_acked_at?: string | null
+          refund_requested_at?: string | null
           status?: string
+          status_before_event_cancel?: string | null
           updated_at?: string
           weapon?: string | null
         }
         Update: {
           amount_due?: number
-          amount_paid?: number
+          cancellation_settled_at?: string | null
+          cancellation_settled_by?: string | null
+          cancellation_settled_note?: string | null
           cancelled_at?: string | null
+          cancelled_by?: string | null
           created_at?: string
           created_by?: string | null
+          deposit?: number | null
           event_id?: string
           id?: string
           loaner_kit?: string[]
           member_id?: string
           notes?: string | null
           payer_id?: string | null
+          policy_acked_at?: string | null
+          refund_requested_at?: string | null
           status?: string
+          status_before_event_cancel?: string | null
           updated_at?: string
           weapon?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "bookings_cancellation_settled_by_fkey"
+            columns: ["cancellation_settled_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "bookings_cancellation_settled_by_fkey"
+            columns: ["cancellation_settled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_cancellation_settled_by_fkey"
+            columns: ["cancellation_settled_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "bookings_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bookings_created_by_fkey"
             columns: ["created_by"]
@@ -606,6 +739,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cancellation_policies: {
+        Row: {
+          active: boolean
+          body: string
+          created_at: string
+          deposit_refundable: boolean
+          id: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          body: string
+          created_at?: string
+          deposit_refundable?: boolean
+          id?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          created_at?: string
+          deposit_refundable?: boolean
+          id?: string
+          title?: string
+        }
+        Relationships: []
       }
       club_contact: {
         Row: {
@@ -925,6 +1085,129 @@ export type Database = {
         }
         Relationships: []
       }
+      credits: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          member_id: string
+          reason: string
+          settled_at: string | null
+          settled_by: string | null
+          settled_note: string | null
+          source: string
+          status: string
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          member_id: string
+          reason: string
+          settled_at?: string | null
+          settled_by?: string | null
+          settled_note?: string | null
+          source?: string
+          status?: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          member_id?: string
+          reason?: string
+          settled_at?: string | null
+          settled_by?: string | null
+          settled_note?: string | null
+          source?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credits_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking_balances"
+            referencedColumns: ["booking_id"]
+          },
+          {
+            foreignKeyName: "credits_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "credits_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "credits_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_settled_by_fkey"
+            columns: ["settled_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "credits_settled_by_fkey"
+            columns: ["settled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_settled_by_fkey"
+            columns: ["settled_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discounts: {
         Row: {
           active: boolean
@@ -1121,13 +1404,13 @@ export type Database = {
           admin_title: string
           calendar_title: string | null
           cancel_date: string | null
+          cancel_policy_id: string | null
           cancellation_reason: string | null
           cancelled_at: string | null
           capacity: number | null
           course_days: string[] | null
           created_at: string
           created_by: string | null
-          currency: string | null
           display_title: string | null
           end_date: string | null
           end_time: string | null
@@ -1145,7 +1428,8 @@ export type Database = {
           original_venue_id: string | null
           polls_attendance: boolean | null
           prereqs: string | null
-          price: number | null
+          price_id: string | null
+          registration_open: boolean
           series_id: string | null
           start_date: string | null
           start_time: string | null
@@ -1157,13 +1441,13 @@ export type Database = {
           admin_title: string
           calendar_title?: string | null
           cancel_date?: string | null
+          cancel_policy_id?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
           capacity?: number | null
           course_days?: string[] | null
           created_at?: string
           created_by?: string | null
-          currency?: string | null
           display_title?: string | null
           end_date?: string | null
           end_time?: string | null
@@ -1181,7 +1465,8 @@ export type Database = {
           original_venue_id?: string | null
           polls_attendance?: boolean | null
           prereqs?: string | null
-          price?: number | null
+          price_id?: string | null
+          registration_open?: boolean
           series_id?: string | null
           start_date?: string | null
           start_time?: string | null
@@ -1193,13 +1478,13 @@ export type Database = {
           admin_title?: string
           calendar_title?: string | null
           cancel_date?: string | null
+          cancel_policy_id?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
           capacity?: number | null
           course_days?: string[] | null
           created_at?: string
           created_by?: string | null
-          currency?: string | null
           display_title?: string | null
           end_date?: string | null
           end_time?: string | null
@@ -1217,7 +1502,8 @@ export type Database = {
           original_venue_id?: string | null
           polls_attendance?: boolean | null
           prereqs?: string | null
-          price?: number | null
+          price_id?: string | null
+          registration_open?: boolean
           series_id?: string | null
           start_date?: string | null
           start_time?: string | null
@@ -1226,6 +1512,13 @@ export type Database = {
           weapons?: string[]
         }
         Relationships: [
+          {
+            foreignKeyName: "events_cancel_policy_id_fkey"
+            columns: ["cancel_policy_id"]
+            isOneToOne: false
+            referencedRelation: "cancellation_policies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
@@ -1252,6 +1545,13 @@ export type Database = {
             columns: ["original_venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
             referencedColumns: ["id"]
           },
           {
@@ -1615,6 +1915,13 @@ export type Database = {
             foreignKeyName: "pass_punches_booking_id_fkey"
             columns: ["booking_id"]
             isOneToOne: false
+            referencedRelation: "booking_balances"
+            referencedColumns: ["booking_id"]
+          },
+          {
+            foreignKeyName: "pass_punches_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
             referencedRelation: "bookings"
             referencedColumns: ["id"]
           },
@@ -1754,6 +2061,36 @@ export type Database = {
           },
         ]
       }
+      payment_methods: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          instructions: string | null
+          key: string
+          label: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          instructions?: string | null
+          key: string
+          label: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          instructions?: string | null
+          key?: string
+          label?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -1769,6 +2106,8 @@ export type Database = {
           payer_id: string | null
           recorded_by: string | null
           reference: string | null
+          voided_at: string | null
+          voided_by: string | null
         }
         Insert: {
           amount: number
@@ -1784,6 +2123,8 @@ export type Database = {
           payer_id?: string | null
           recorded_by?: string | null
           reference?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
         }
         Update: {
           amount?: number
@@ -1799,8 +2140,17 @@ export type Database = {
           payer_id?: string | null
           recorded_by?: string | null
           reference?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "booking_balances"
+            referencedColumns: ["booking_id"]
+          },
           {
             foreignKeyName: "payments_booking_id_fkey"
             columns: ["booking_id"]
@@ -1885,6 +2235,27 @@ export type Database = {
             referencedRelation: "roster"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "payments_voided_by_fkey"
+            columns: ["voided_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "payments_voided_by_fkey"
+            columns: ["voided_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_voided_by_fkey"
+            columns: ["voided_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
         ]
       }
       prices: {
@@ -1894,6 +2265,7 @@ export type Database = {
           applies_to: string[]
           created_at: string
           currency: string | null
+          deposit_amount: number | null
           id: string
           label: string
           notes: string | null
@@ -1906,6 +2278,7 @@ export type Database = {
           applies_to?: string[]
           created_at?: string
           currency?: string | null
+          deposit_amount?: number | null
           id?: string
           label: string
           notes?: string | null
@@ -1918,6 +2291,7 @@ export type Database = {
           applies_to?: string[]
           created_at?: string
           currency?: string | null
+          deposit_amount?: number | null
           id?: string
           label?: string
           notes?: string | null
@@ -2461,36 +2835,54 @@ export type Database = {
       waiver_signatures: {
         Row: {
           body_snapshot: string
+          content_sha256: string | null
           created_at: string
           event_id: string | null
           guardian_name: string | null
           id: string
           member_id: string
+          method: string
           signed_at: string
+          signed_by: string | null
           signed_name: string
+          title_snapshot: string | null
+          waiver_code: string
           waiver_id: string
+          waiver_version: number
         }
         Insert: {
           body_snapshot: string
+          content_sha256?: string | null
           created_at?: string
           event_id?: string | null
           guardian_name?: string | null
           id?: string
           member_id: string
+          method?: string
           signed_at?: string
+          signed_by?: string | null
           signed_name: string
+          title_snapshot?: string | null
+          waiver_code: string
           waiver_id: string
+          waiver_version: number
         }
         Update: {
           body_snapshot?: string
+          content_sha256?: string | null
           created_at?: string
           event_id?: string | null
           guardian_name?: string | null
           id?: string
           member_id?: string
+          method?: string
           signed_at?: string
+          signed_by?: string | null
           signed_name?: string
+          title_snapshot?: string | null
+          waiver_code?: string
           waiver_id?: string
+          waiver_version?: number
         }
         Relationships: [
           {
@@ -2522,6 +2914,34 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "waiver_signatures_signed_by_fkey"
+            columns: ["signed_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "waiver_signatures_signed_by_fkey"
+            columns: ["signed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waiver_signatures_signed_by_fkey"
+            columns: ["signed_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waiver_signatures_waiver_id_fkey"
+            columns: ["waiver_id"]
+            isOneToOne: false
+            referencedRelation: "current_waivers"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "waiver_signatures_waiver_id_fkey"
             columns: ["waiver_id"]
             isOneToOne: false
@@ -2532,10 +2952,13 @@ export type Database = {
       }
       waivers: {
         Row: {
+          active: boolean
           applies_to: string[]
           body: string
+          cadence: string
           code: string
           created_at: string
+          created_by: string | null
           id: string
           published_at: string | null
           requires_guardian: boolean
@@ -2543,10 +2966,13 @@ export type Database = {
           version: number
         }
         Insert: {
+          active?: boolean
           applies_to?: string[]
           body: string
+          cadence?: string
           code: string
           created_at?: string
+          created_by?: string | null
           id?: string
           published_at?: string | null
           requires_guardian?: boolean
@@ -2554,17 +2980,42 @@ export type Database = {
           version?: number
         }
         Update: {
+          active?: boolean
           applies_to?: string[]
           body?: string
+          cadence?: string
           code?: string
           created_at?: string
+          created_by?: string | null
           id?: string
           published_at?: string | null
           requires_guardian?: boolean
           title?: string
           version?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -2586,6 +3037,73 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: true
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_balances: {
+        Row: {
+          balance: number | null
+          booking_id: string | null
+          deposit: number | null
+          deposit_due: number | null
+          event_id: string | null
+          member_id: string | null
+          owed: number | null
+          paid: number | null
+          payer_id: string | null
+          returned: number | null
+          status: string | null
+          unsettled: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "bookings_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "bookings_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "roster"
             referencedColumns: ["id"]
           },
         ]
@@ -2616,24 +3134,60 @@ export type Database = {
         }
         Relationships: []
       }
+      current_waivers: {
+        Row: {
+          active: boolean | null
+          applies_to: string[] | null
+          body: string | null
+          cadence: string | null
+          code: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string | null
+          published_at: string | null
+          requires_guardian: boolean | null
+          title: string | null
+          version: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "member_balances"
+            referencedColumns: ["member_id"]
+          },
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waivers_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "roster"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       member_balances: {
         Row: {
+          account_credit: number | null
           member_id: string | null
           outstanding: number | null
-          owed: number | null
-          paid: number | null
         }
         Insert: {
+          account_credit?: never
           member_id?: string | null
           outstanding?: never
-          owed?: never
-          paid?: never
         }
         Update: {
+          account_credit?: never
           member_id?: string | null
           outstanding?: never
-          owed?: never
-          paid?: never
         }
         Relationships: []
       }
@@ -2757,20 +3311,144 @@ export type Database = {
     }
     Functions: {
       accept_current_terms: { Args: { p_version: number }; Returns: undefined }
-      event_confirmed_count: { Args: { p_event_id: string }; Returns: number }
-      event_confirmed_counts: {
+      apply_credit_to_booking: {
+        Args: { p_amount?: number; p_booking_id: string }
+        Returns: number
+      }
+      booking_net_paid: { Args: { p_booking_id: string }; Returns: number }
+      booking_owed: { Args: { p_booking_id: string }; Returns: number }
+      booking_returned: { Args: { p_booking_id: string }; Returns: number }
+      club_timezone: { Args: never; Returns: string }
+      club_today: { Args: never; Returns: string }
+      event_places_taken: {
         Args: { p_event_ids: string[] }
         Returns: {
           event_id: string
-          n: number
+          taken: number
         }[]
       }
       is_active_user: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_coach_or_admin: { Args: never; Returns: boolean }
       is_end_user: { Args: never; Returns: boolean }
+      is_minor: { Args: { p_member_id: string }; Returns: boolean }
       is_self_or_child: { Args: { p_id: string }; Returns: boolean }
+      missing_waivers: {
+        Args: { p_event_id: string; p_member_id: string }
+        Returns: {
+          active: boolean
+          applies_to: string[]
+          body: string
+          cadence: string
+          code: string
+          created_at: string
+          created_by: string | null
+          id: string
+          published_at: string | null
+          requires_guardian: boolean
+          title: string
+          version: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "waivers"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      my_missing_waivers: {
+        Args: { p_event_id: string; p_member_id: string }
+        Returns: {
+          active: boolean
+          applies_to: string[]
+          body: string
+          cadence: string
+          code: string
+          created_at: string
+          created_by: string | null
+          id: string
+          published_at: string | null
+          requires_guardian: boolean
+          title: string
+          version: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "waivers"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       my_parent_account: { Args: never; Returns: string }
+      promote_waitlist: { Args: { p_event_id: string }; Returns: undefined }
+      record_paper_waiver: {
+        Args: {
+          p_event_id?: string
+          p_guardian_name?: string
+          p_member_id: string
+          p_signed_name: string
+          p_waiver_id: string
+        }
+        Returns: {
+          body_snapshot: string
+          content_sha256: string | null
+          created_at: string
+          event_id: string | null
+          guardian_name: string | null
+          id: string
+          member_id: string
+          method: string
+          signed_at: string
+          signed_by: string | null
+          signed_name: string
+          title_snapshot: string | null
+          waiver_code: string
+          waiver_id: string
+          waiver_version: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "waiver_signatures"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      sign_waiver: {
+        Args: {
+          p_event_id?: string
+          p_guardian_name?: string
+          p_member_id: string
+          p_signed_name: string
+          p_waiver_id: string
+        }
+        Returns: {
+          body_snapshot: string
+          content_sha256: string | null
+          created_at: string
+          event_id: string | null
+          guardian_name: string | null
+          id: string
+          member_id: string
+          method: string
+          signed_at: string
+          signed_by: string | null
+          signed_name: string
+          title_snapshot: string | null
+          waiver_code: string
+          waiver_id: string
+          waiver_version: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "waiver_signatures"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      sync_booking_status: {
+        Args: { p_booking_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

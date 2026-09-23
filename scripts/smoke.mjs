@@ -82,6 +82,16 @@ await page.goto('http://localhost:5373/manage/attendance', { waitUntil: 'network
 await page.waitForTimeout(800)
 await shot('07-manage-attendance')
 
+console.log('manage → events, payments, prices, waivers')
+await page.goto('http://localhost:5373/manage/events/22222222-0000-4000-8000-000000000001', { waitUntil: 'networkidle' })
+await shot('07a-manage-event-registrations')
+await page.goto('http://localhost:5373/manage/payments', { waitUntil: 'networkidle' })
+await shot('07b-manage-payments')
+await page.goto('http://localhost:5373/manage/prices', { waitUntil: 'networkidle' })
+await shot('07c-manage-prices')
+await page.goto('http://localhost:5373/manage/waivers', { waitUntil: 'networkidle' })
+await shot('07d-manage-waivers')
+
 console.log('sign in as the fencer, for bouts and profile')
 await page.goto('http://localhost:5373/login')
 await page.evaluate(() => { localStorage.clear() })
@@ -97,6 +107,8 @@ await shot('09-results')
 await page.goto('http://localhost:5373/profile', { waitUntil: 'networkidle' })
 await page.waitForTimeout(900)
 await shot('10-profile')
+await page.goto('http://localhost:5373/bookings', { waitUntil: 'networkidle' })
+await shot('11-my-events')
 
 await browser.close()
 

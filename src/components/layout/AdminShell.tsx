@@ -12,8 +12,10 @@ const LINKS = [
   { to: '/manage/members',   label: () => t.admin.members,      adminOnly: false },
   { to: '/manage/events',    label: () => t.admin.events,       adminOnly: false },
   { to: '/manage/attendance',label: () => t.admin.polls,        adminOnly: false },
+  { to: '/manage/payments',  label: () => t.admin.payments,     adminOnly: false },
   { to: '/manage/venues',    label: () => t.admin.venues,       adminOnly: true },
   { to: '/manage/prices',    label: () => t.admin.prices,       adminOnly: true },
+  { to: '/manage/waivers',   label: () => t.admin.waivers,      adminOnly: true },
   { to: '/manage/audit',     label: () => t.admin.audit,        adminOnly: true },
 ]
 

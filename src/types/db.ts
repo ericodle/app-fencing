@@ -48,6 +48,12 @@ export type CompetitionResultInsert = T['competition_results']['Insert']
 export type FitnessTest       = T['fitness_tests']['Row']
 export type FitnessTestInsert = T['fitness_tests']['Insert']
 export type Price             = T['prices']['Row']
+export type CancellationPolicy = T['cancellation_policies']['Row']
+export type PaymentMethod     = T['payment_methods']['Row']
+export type Credit            = T['credits']['Row']
+export type BookingAmendment  = T['booking_amendments']['Row']
+export type BookingBalance    = V['booking_balances']['Row']
+export type CurrentWaiver     = V['current_waivers']['Row']
 export type Payment           = T['payments']['Row']
 export type Pass              = T['passes']['Row']
 export type PassBalance       = V['pass_balances']['Row']
@@ -70,7 +76,7 @@ export type Role         = 'fencer' | 'coach' | 'admin'
 export type MemberStatus = 'pending' | 'active' | 'rejected' | 'on_hold' | 'closed'
 export type PollResponse = 'yes' | 'no' | 'maybe'
 export type RideSeatStatus = 'claimed' | 'waitlisted' | 'cancelled'
-export type BookingStatus  = 'confirmed' | 'waitlisted' | 'cancelled' | 'no_show'
+export type BookingStatus  = 'pending' | 'confirmed' | 'waitlisted' | 'cancelled' | 'no_show'
 
 // ── compile-time guards ──────────────────────────────────────────────────────
 //

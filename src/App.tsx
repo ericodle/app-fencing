@@ -21,10 +21,14 @@ import { RecordsPage } from './pages/RecordsPage'
 import { BoutsPage } from './pages/BoutsPage'
 import { ResultsPage } from './pages/ResultsPage'
 import { AttendanceHistoryPage } from './pages/AttendanceHistoryPage'
+import { BookingsPage } from './pages/BookingsPage'
 
 import { ManagePage } from './pages/admin/ManagePage'
 import { AdminMembersPage } from './pages/admin/AdminMembersPage'
 import { AdminEventsPage } from './pages/admin/AdminEventsPage'
+import { AdminEventDetailPage } from './pages/admin/AdminEventDetailPage'
+import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage'
+import { AdminWaiversPage } from './pages/admin/AdminWaiversPage'
 import { AdminAttendancePage } from './pages/admin/AdminAttendancePage'
 import { AdminVenuesPage } from './pages/admin/AdminVenuesPage'
 import { AdminPricesPage } from './pages/admin/AdminPricesPage'
@@ -64,6 +68,7 @@ export default function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/calendar/:id" element={<EventDetailPage />} />
+                <Route path="/bookings" element={<BookingsPage />} />
                 <Route path="/roster" element={<RosterPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/contact" element={<ContactPage />} />
@@ -80,11 +85,14 @@ export default function App() {
                   <Route path="/manage" element={<ManagePage />} />
                   <Route path="/manage/members" element={<AdminMembersPage />} />
                   <Route path="/manage/events" element={<AdminEventsPage />} />
+                  <Route path="/manage/events/:id" element={<AdminEventDetailPage />} />
+                  <Route path="/manage/payments" element={<AdminPaymentsPage />} />
                   <Route path="/manage/attendance" element={<AdminAttendancePage />} />
 
                   <Route element={<AdminRoute />}>
                     <Route path="/manage/venues" element={<AdminVenuesPage />} />
                     <Route path="/manage/prices" element={<AdminPricesPage />} />
+                    <Route path="/manage/waivers" element={<AdminWaiversPage />} />
                     <Route path="/manage/audit" element={<AdminAuditPage />} />
                   </Route>
                 </Route>

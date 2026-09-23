@@ -79,6 +79,14 @@ export function relativeDay(iso: string, now: Date = new Date()): string {
   return formatDate(iso)
 }
 
+/** A club-local date moved by whole days. Arithmetic at noon UTC, for the
+ *  same reason parseDate is. */
+export function addDays(iso: string, days: number): string {
+  const d = parseDate(iso)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+
 export function isPast(iso: string, now: Date = new Date()): boolean {
   return daysUntil(iso, now) < 0
 }

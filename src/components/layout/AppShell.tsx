@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { clubConfig } from '../../config/club'
 import { t } from '../../i18n'
 import { Logo } from '../Logo'
+import { TermsBanner } from './TermsBanner'
 
 // The member-facing chrome: a fixed header with the lockup, a nav that becomes
 // a bottom bar on a phone, and the outlet.
@@ -16,6 +17,7 @@ import { Logo } from '../Logo'
 const LINKS = [
   { to: '/dashboard', label: () => t.nav.dashboard },
   { to: '/calendar',  label: () => t.nav.calendar },
+  { to: '/bookings',  label: () => t.nav.bookings },
   { to: '/roster',    label: () => t.nav.roster },
   { to: '/records',   label: () => t.nav.records },
   { to: '/profile',   label: () => t.nav.profile },
@@ -75,11 +77,12 @@ export function AppShell() {
 
       {/* pb-24 on small screens leaves room for the fixed bottom bar. */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-24 sm:pb-10">
+        <TermsBanner />
         <Outlet />
       </main>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-rule-faint bg-ink-900 pb-[env(safe-area-inset-bottom)] sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-6 border-t border-rule-faint bg-ink-900 pb-[env(safe-area-inset-bottom)] sm:hidden"
         aria-label="Main"
       >
         {LINKS.map(link => (

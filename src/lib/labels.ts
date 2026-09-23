@@ -58,3 +58,9 @@ export function weaponListLabel(weapons: readonly string[] | null | undefined): 
   if (!weapons || weapons.length === 0) return t.common.notSet
   return WEAPONS.filter(w => weapons.includes(w)).map(weaponLabel).join(' · ')
 }
+
+const BOOKING_STATUSES = ['pending', 'confirmed', 'waitlisted', 'cancelled', 'no_show'] as const
+type BookingStatusKey = typeof BOOKING_STATUSES[number]
+
+export const bookingStatusLabel = (v: string | null | undefined) =>
+  lookup<BookingStatusKey>(BOOKING_STATUSES, t.booking.status, v)

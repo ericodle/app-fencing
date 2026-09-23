@@ -135,6 +135,51 @@ arrow and chart axis in the app needs to know which.
 `side` exists for the tests run per limb, where the left/right difference is
 itself the finding. In a sport played almost entirely off one leg, it usually is.
 
+## bookings and money
+
+A registration is a `bookings` row. Everything about what it costs is decided
+by the database when it is made (`bookings_prepare`), from the event's price
+tier, whatever the client sent: `amount_due` and `deposit` are frozen onto the
+booking, so editing the price list never changes what somebody agreed to pay.
+An event with no tier is free.
+
+Statuses: `pending` until what has been paid covers the deposit (clamped to what
+is owed; with no deposit, the whole price), then `confirmed`; a void that takes
+that away puts it back to `pending`. A free booking confirms at once. Past
+capacity a booking is `waitlisted`, and pending and confirmed bookings both hold
+a place. When a place frees, `promote_waitlist` gives it to the longest-waiting
+booking and notifies them. `sync_booking_status` is the one place the
+pending/confirmed rule lives.
+
+Money is a ledger, never a balance:
+
+- **owed** = `amount_due` + Σ `booking_amendments` (signed, immutable; a
+  discount is a negative row)
+- **paid** = Σ `payments` not voided (signed; a cash refund is a negative row;
+  voiding is the one edit a payment allows)
+- `booking_balances` is the view every screen reads: owed, paid, deposit due,
+  balance, and `unsettled` — money on a cancelled booking that nobody has
+  refunded, credited or kept.
+
+Cancellation refunds as account credit (`credits`, a signed ledger with a
+`source`), by the four cases in `bookings_credit_on_cancel`: the club cancels
+the event (everything back, deposit included); the member asked on or before
+`cancel_date` (everything back, minus the deposit if the event's
+`cancellation_policies` row keeps it); asked after it, or cancelled by an admin
+unasked (only spent account credit back — the rest waits as `unsettled` for an
+admin to refund, credit or keep). Cancelling an event cancels its bookings and
+records what each was, so restoring the event restores exactly those and
+reclaims the credit.
+
+A member may cancel their own booking only while nothing is paid; after that
+they ask for a refund (`refund_requested_at`) and an admin approves it. The
+guard is `bookings_guard_member_edits`, which steps aside for the database's own
+SECURITY DEFINER updates by asking `current_user`, not `auth.uid()`.
+
+An event with bookings cannot be deleted, and neither can a venue or price tier
+an event uses: the foreign keys restrict, and the admin cancels, archives or
+deactivates instead.
+
 ## passes
 
 A ten-session card or a term's unlimited training — the thing most clubs
@@ -143,12 +188,25 @@ a card with nothing on it or one that has expired, and allows a negative punch
 either way, because a correction must not be blocked by the rule that blocks a
 fresh use.
 
-## waiver_signatures
+## waivers and waiver_signatures
 
-Immutable, by a trigger that rejects UPDATE and DELETE from everybody including
-the service role. A signature that can be revised after the fact is not evidence
-of anything. `body_snapshot` freezes the wording as it stood, because
-`waiver_id` alone points at whatever the row says today.
+A waiver is versioned by `(code, version)`; a published row's words cannot be
+edited, so changing them is publishing version N+1, which makes every older
+signature out of date. `cadence` is `annual` (good for 365 days) or
+`per_event`; `applies_to` lists the event kinds that ask for it; a
+`requires_guardian` waiver applies only to a minor (a junior account, or under
+18 by date of birth) and names the guardian who signed.
+
+`missing_waivers(member, event)` is the one answer to "what does this member
+still owe", read by the booking trigger — a member cannot register until it is
+empty — and by the app through `my_missing_waivers`, which only answers about
+yourself, your juniors, or anyone for staff.
+
+Signatures are written only by `sign_waiver` (yourself or your junior) and
+`record_paper_waiver` (admin), which take the snapshot on the server: title,
+body, version and a SHA-256 of the body. They are immutable, by a trigger that
+rejects UPDATE and DELETE from everybody including the service role. A
+signature that can be revised after the fact is not evidence of anything.
 
 ## admin_audit_log
 

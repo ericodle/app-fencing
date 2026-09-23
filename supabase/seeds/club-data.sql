@@ -14,17 +14,18 @@ values (true,
 on conflict (id) do nothing;
 
 insert into public.club_contact (id, email, phone, address, native_address, map_query, hours)
-values (true, 'hello@kuou.dev', '+886 2 2762 1234',
+values (true, 'kuoufencingclub@protonmail.com', '+886 2 2762 1234',
   'No. 128, Section 4, Bade Road, Songshan District, Taipei',
   '台北市松山區八德路四段128號',
   'No. 128, Section 4, Bade Road, Taipei',
   'Mon–Fri evenings, Saturday mornings')
-on conflict (id) do nothing;
+on conflict (id) do update set
+  email = excluded.email, phone = excluded.phone, address = excluded.address,
+  native_address = excluded.native_address, map_query = excluded.map_query, hours = excluded.hours;
 
 insert into public.contact_channels (channel, label, url, handle, sort_order) values
   ('line',      'LINE',      'https://line.me/R/ti/p/@kuoufencing',      '@kuoufencing',       1),
-  ('instagram', 'Instagram', 'https://instagram.com/kuoufencing',        '@kuoufencing',       2),
-  ('email',     'Email',     'mailto:hello@kuou.dev',                     'hello@kuou.dev',      3)
+  ('instagram', 'Instagram', 'https://instagram.com/kuoufencing',        '@kuoufencing',       2)
 on conflict do nothing;
 
 insert into public.terms (version, body, published_at)
@@ -76,14 +77,28 @@ insert into public.venues (id, name, native_name, kind, address, district, lat, 
    'North-side option. Sprung floor, no power.')
 on conflict (id) do nothing;
 
+insert into public.prices (id, label, amount, deposit_amount, currency, unit, applies_to, sort_order) values
+  ('66666666-0000-4000-8000-000000000001', 'Drop-in, open training', 400, null, 'NTD', 'session', array['practice','cross_training'], 1),
+  ('66666666-0000-4000-8000-000000000002', 'Adult beginner term',   6000, 2000, 'NTD', 'term',    array['course'],           2)
+on conflict (id) do nothing;
+
 insert into public.prices (label, amount, currency, unit, applies_to, sort_order) values
-  ('Drop-in, open training',   400, 'NTD', 'session', array['practice','cross_training'], 1),
-  ('Adult beginner term',     6000, 'NTD', 'term',    array['course'],           2),
   ('Kids'' term',             5000, 'NTD', 'term',    array['course'],           3),
   ('Ten-session card',        3500, 'NTD', 'pass',    array['practice'],         4),
   ('Annual membership',       1500, 'NTD', 'membership', '{}',                   5),
   ('Full loaner kit',          400, 'NTD', 'loan',    '{}',                      6)
 on conflict do nothing;
+
+insert into public.cancellation_policies (id, title, body, deposit_refundable) values
+  ('55555555-0000-4000-8000-000000000001', 'Drop-in sessions',
+   E'Cancel any time before the session and your payment comes back as account credit.\n\nNo-shows are not refunded.', true),
+  ('55555555-0000-4000-8000-000000000002', 'Term courses',
+   E'The deposit holds your place and is not refundable.\n\nCancel by the cancel-by date and the rest comes back as account credit. After that date the course fee is kept, because the place cannot be filled.', false)
+on conflict (id) do nothing;
+
+update public.payment_methods set instructions = E'Bank of Taiwan (004), account 123-456-789012, Kuou Fencing Club.\nPut your name in the transfer note.'
+ where key = 'transfer';
+update public.payment_methods set instructions = 'Send to LINE Pay ID @kuoufencing.' where key = 'linepay';
 
 insert into public.discounts (label, kind, value, eligibility) values
   ('Student',  'percent', 20, 'Full-time student with a valid card'),
@@ -97,13 +112,14 @@ on conflict do nothing;
 -- stack is reset.
 insert into public.events (
   id, kind, admin_title, display_title, calendar_title, venue_id,
-  start_date, start_time, end_time, weapons, level, capacity, price, currency,
-  polls_attendance, meetup_open, notes, created_by
+  start_date, start_time, end_time, weapons, level, capacity, price_id,
+  cancel_policy_id, cancel_date, polls_attendance, meetup_open, notes, created_by
 ) values
   ('22222222-0000-4000-8000-000000000001', 'practice',
    'Open training — Tuesday', 'Open training', 'Open training',
    '11111111-0000-4000-8000-000000000001',
-   (current_date + 1), '19:00', '21:30', array['epee','saber'], 'open', 24, 400, 'NTD',
+   (current_date + 1), '19:00', '21:30', array['epee','saber'], 'open', 24, '66666666-0000-4000-8000-000000000001',
+   '55555555-0000-4000-8000-000000000001', (current_date + 1),
    true, false,
    'Épée and saber bouting with a coach on the floor. Guests from other clubs welcome.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
@@ -111,7 +127,7 @@ insert into public.events (
   ('22222222-0000-4000-8000-000000000002', 'cross_training',
    'Park conditioning — Saturday', 'Park conditioning', 'Park conditioning',
    '11111111-0000-4000-8000-000000000002',
-   (current_date + 4), '06:45', '07:45', '{}', 'all', 30, null, null,
+   (current_date + 4), '06:45', '07:45', '{}', 'all', 30, null, null, null,
    true, true,
    'No blades needed: sprints, footwork ladders and core work in running shoes. Where we meet depends on who is coming — check the planner on Friday night.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
@@ -119,42 +135,45 @@ insert into public.events (
   ('22222222-0000-4000-8000-000000000003', 'practice',
    'Saber night', 'Saber night', 'Saber night',
    '11111111-0000-4000-8000-000000000001',
-   (current_date + 3), '19:00', '21:00', array['saber'], 'intermediate', 16, 400, 'NTD',
+   (current_date + 3), '19:00', '21:00', array['saber'], 'intermediate', 16, '66666666-0000-4000-8000-000000000001',
+   '55555555-0000-4000-8000-000000000001', (current_date + 3),
    true, false, 'Saber only. Lamés and conductive gloves required — the rack has four of each.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
 
   ('22222222-0000-4000-8000-000000000004', 'interclub',
    'Interclub vs Neihu Fencing', 'Interclub vs Neihu', 'Interclub',
    '11111111-0000-4000-8000-000000000004',
-   (current_date + 11), '13:00', '18:00', array['epee'], 'open', 20, null, null,
+   (current_date + 11), '13:00', '18:00', array['epee'], 'open', 20, null, null, null,
    true, false, 'Team épée, three on three, at Banqiao. Travel by carpool — offer a seat when you RSVP.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
 
   ('22222222-0000-4000-8000-000000000005', 'social',
    'End-of-term dinner', 'End-of-term dinner', 'Dinner',
    null,
-   (current_date + 25), '19:00', null, '{}', 'all', null, null, null,
+   (current_date + 25), '19:00', null, '{}', 'all', null, null, null, null,
    true, false, 'Somewhere with round tables. Bring nobody sharp.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
 
   ('22222222-0000-4000-8000-000000000006', 'practice',
    'Open training — last Tuesday', 'Open training', 'Open training',
    '11111111-0000-4000-8000-000000000001',
-   (current_date - 6), '19:00', '21:30', array['epee','saber'], 'open', 24, 400, 'NTD',
+   (current_date - 6), '19:00', '21:30', array['epee','saber'], 'open', 24, '66666666-0000-4000-8000-000000000001',
+   '55555555-0000-4000-8000-000000000001', (current_date - 6),
    false, false, null, 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb')
 on conflict (id) do nothing;
 
 -- The adult beginner term, on an explicit day list.
 insert into public.events (
   id, kind, admin_title, display_title, calendar_title, venue_id,
-  course_days, start_time, end_time, weapons, level, capacity, price, currency,
-  polls_attendance, notes, created_by
+  course_days, start_time, end_time, weapons, level, capacity, price_id,
+  cancel_policy_id, cancel_date, full_payment_deadline, polls_attendance, notes, created_by
 ) values (
   '22222222-0000-4000-8000-000000000007', 'course',
   'Adult beginner épée — autumn term', 'Adult beginner lessons · Épée', 'Beginner épée',
   '11111111-0000-4000-8000-000000000001',
   array[(current_date + 2), (current_date + 9), (current_date + 16), (current_date + 23)]::date[],
-  '19:00', '21:00', array['epee'], 'beginner', 10, 6000, 'NTD',
+  '19:00', '21:00', array['epee'], 'beginner', 10, '66666666-0000-4000-8000-000000000002',
+  '55555555-0000-4000-8000-000000000002', (current_date + 1), (current_date + 1),
   false, 'Four evenings. You finish competition-ready, and the kit is included.',
   'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
 ) on conflict (id) do nothing;
@@ -173,6 +192,29 @@ insert into public.duties (event_id, assignee_id, role) values
   -- Adult beginner épée
   ('22222222-0000-4000-8000-000000000007', 'cccccccc-1111-4111-8111-cccccccccccc', 'coach')
 on conflict do nothing;
+
+
+-- ── registrations and money ──────────────────────────────────────────────────
+-- Mei has signed her waivers, registered for Tuesday and paid cash at the
+-- door: confirmed. Sam has registered for the beginner term and not yet paid
+-- the deposit: pending, which is what the admin's payments list is for.
+insert into public.waiver_signatures
+  (waiver_id, member_id, signed_name, body_snapshot, waiver_code, waiver_version, title_snapshot,
+   content_sha256, signed_by)
+select w.id, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Mei Lin', w.body, w.code, w.version, w.title,
+       encode(extensions.digest(w.body, 'sha256'), 'hex'), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+from public.waivers w where w.code in ('liability', 'media');
+
+insert into public.bookings (id, event_id, member_id, policy_acked_at) values
+  ('77777777-0000-4000-8000-000000000001', '22222222-0000-4000-8000-000000000001',
+   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', now()),
+  ('77777777-0000-4000-8000-000000000002', '22222222-0000-4000-8000-000000000007',
+   'dddddddd-dddd-dddd-dddd-dddddddddddd', now())
+on conflict do nothing;
+
+insert into public.payments (member_id, booking_id, amount, method, note, recorded_by) values
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '77777777-0000-4000-8000-000000000001', 400, 'cash',
+   'At the door', 'cccccccc-cccc-cccc-cccc-cccccccccccc');
 
 
 -- ── an open poll, with answers ───────────────────────────────────────────────
