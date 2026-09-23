@@ -106,9 +106,22 @@ The app runs on one Supabase project and two Cloudflare Workers, both on free
 tiers for a club this size.
 
 ```sh
-npm run db:push     # apply migrations to your Supabase project
-npm run deploy      # build and ship both workers
+npm run db:push           # apply new migrations to the cloud database
+npm run db:verify         # schema drift between local and cloud
+npm run db:auth           # point Auth's Site URL and redirect list at urls.app
+npm run deploy:functions  # ship the Supabase edge functions (create-member)
+npm run deploy            # build and ship both workers
+npm run deploy:app        # just the app worker
+npm run deploy:push       # just the push cron worker
+npm run db:backup         # snapshot the cloud database before a risky migration
 ```
+
+A typical release is `npm run db:push && npm run deploy:functions && npm run
+deploy`. Migrations go first because the app may depend on them; `db:push`
+applies only migrations the cloud has not seen, so it is safe to run every
+time. The Supabase commands read the cloud project's credentials — including
+`SUPABASE_ACCESS_TOKEN`, a personal access token from the account that owns the
+project — from `.env.local`; the Cloudflare deploys read `.env.production`.
 
 Required environment variables are documented in
 [`.env.example`](.env.example) and the flow in
