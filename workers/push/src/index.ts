@@ -79,7 +79,7 @@ export default {
   },
 }
 
-const appUrl = (env: Env) => env.APP_URL ?? 'https://app.kuou.tw'
+const appUrl = (env: Env) => env.APP_URL ?? 'https://app.kuou.dev'
 const clubName = (env: Env) => env.CLUB_NAME ?? 'Kuou Fencing Club'
 const timeZone = (env: Env) => env.CLUB_TIMEZONE ?? 'Asia/Taipei'
 

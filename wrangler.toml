@@ -2,6 +2,10 @@ name = "kuou-app"
 main = "src/worker.ts"
 compatibility_date = "2026-04-01"
 
+# The first deploy creates the DNS record and orders the certificate; the
+# kuou.dev zone just has to be in the same Cloudflare account.
+routes = [{ pattern = "app.kuou.dev", custom_domain = true }]
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"

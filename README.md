@@ -1,6 +1,6 @@
 # Piste — Kuou Fencing Club
 
-**The club app for [Kuou Fencing Club](https://kuou.tw).**
+**The club app for [Kuou Fencing Club](https://www.kuou.dev).**
 
 Who is coming to practice, where the club should meet, and every bout, result
 and benchmark a fencer accumulates. A progressive web app the club hosts

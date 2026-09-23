@@ -36,14 +36,12 @@ export const clubConfig = {
     logoAlt: 'Kuou Fencing Club',
   },
 
-  // No trailing slashes.
-  // TODO: these followed the old club name and have not been confirmed against
-  // a domain anyone owns. `urls.app` is what share links are built from, so it
-  // has to match the deployed origin before the app goes live.
+  // No trailing slashes. `urls.app` is what share links are built from, so it
+  // has to match the custom domain in wrangler.toml.
   urls: {
-    site: 'https://kuou.tw',
-    app: 'https://app.kuou.tw',
-    eventPage: 'https://kuou.tw/#calendar',
+    site: 'https://www.kuou.dev',
+    app: 'https://app.kuou.dev',
+    eventPage: 'https://www.kuou.dev/#calendar',
   },
 
   locale: {

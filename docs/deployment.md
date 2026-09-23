@@ -25,7 +25,12 @@ Then:
 ```sh
 npm run db:link
 npm run db:push     # applies all six migrations to the cloud project
+npm run db:auth     # points Auth's Site URL and redirect allow list at urls.app
 ```
+
+A new project's Site URL is `http://localhost:3000`, so until `npm run db:auth`
+runs, every confirmation and password-reset email links to the member's own
+machine.
 
 `npm run db:push` ships **migrations only**. The seed files under `supabase/seeds/`
 are local fixtures and never leave the machine — which is deliberate, since they
@@ -35,7 +40,9 @@ contain accounts with published passwords.
 
 From [dash.cloudflare.com](https://dash.cloudflare.com), create an API token
 with **Workers Scripts: Edit**, **Workers KV: Edit** and **Account Settings:
-Read**. Put it and the account id in `.env.production`.
+Read**, plus **Workers Routes: Edit** and **DNS: Edit** on the `kuou.dev` zone
+for the custom domain. Put it and the account id in `.env.production`;
+`npm run deploy:push` reads them from there too.
 
 ### 3. Web push
 
@@ -45,7 +52,8 @@ npx web-push generate-vapid-keys
 
 The **public** half goes in `.env.production` as `VITE_VAPID_PUBLIC_KEY` (it is
 baked into the bundle and is not a secret). Both halves go in `.env.push`, which
-`npm run deploy:push` uploads as Worker secrets.
+`npm run deploy:push` uploads as Worker secrets (`wrangler deploy
+--secrets-file`).
 
 Changing the pair later invalidates every existing subscription, so keep it.
 
@@ -98,10 +106,11 @@ behind it, not the key. The service-role key bypasses all of them.
 
 ## Custom domain
 
-Point `app.kuou.tw` at the SPA worker under **Workers → your worker →
-Settings → Domains & Routes**. Cloudflare issues the certificate. Then set
-`urls.app` in `piste.config.ts` to match, since it is what share links are built
-from.
+`wrangler.toml` claims `app.kuou.dev` as a custom domain, so the first
+`npm run deploy:app` creates the DNS record and orders the certificate — there
+is nothing to click. The `kuou.dev` zone has to be in the same Cloudflare
+account. `urls.app` in `piste.config.ts` must match it, since share links and
+the Auth redirect URLs are built from it.
 
 ## Verifying
 

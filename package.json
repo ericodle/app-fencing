@@ -25,11 +25,12 @@
     "db:types": "node scripts/gen-types.mjs",
     "db:link": "dotenv -e .env.local -- sh -c 'node scripts/supabase.mjs link --project-ref \"$SUPABASE_PROJECT_REF\" --password \"$SUPABASE_DB_PASSWORD\"'",
     "db:push": "dotenv -e .env.local -- sh -c 'node scripts/supabase.mjs db push --password \"$SUPABASE_DB_PASSWORD\"'",
+    "db:auth": "dotenv -e .env.local -- node scripts/configure-auth.mjs",
     "db:verify": "dotenv -e .env.local -- node scripts/supabase.mjs db diff --linked --schema public",
     "db:backup": "node scripts/backup-db.mjs",
     "deploy": "npm run deploy:app && npm run deploy:push",
     "deploy:app": "npm run build && dotenv -e .env.production -- wrangler deploy",
-    "deploy:push": "cd workers/push && npx dotenv -e ../../.env.push -- npx wrangler deploy",
+    "deploy:push": "cd workers/push && npx dotenv -e ../../.env.production -- npx wrangler deploy --secrets-file ../../.env.push",
     "deploy:functions": "dotenv -e .env.local -- sh -c 'node scripts/supabase.mjs functions deploy --project-ref \"$SUPABASE_PROJECT_REF\"'"
   },
   "dependencies": {

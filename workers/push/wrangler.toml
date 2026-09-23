@@ -12,7 +12,7 @@ crons = ["0 22 * * *"]
 [vars]
 CLUB_NAME = "Kuou Fencing Club"
 CLUB_TIMEZONE = "Asia/Taipei"
-APP_URL = "https://app.kuou.tw"
+APP_URL = "https://app.kuou.dev"
 
 # Secrets — set with `wrangler secret put`, or `npm run deploy:push`, which reads
 # them from .env.push. None of them belong in this file.
