@@ -22,9 +22,18 @@
 //    production problem. The container name is project-scoped, so its presence
 //    is the one unambiguous check.
 //
+// 3. --remote
+//
+//    Appends --db-url for the cloud project, built from SUPABASE_PROJECT_REF,
+//    SUPABASE_DB_PASSWORD and SUPABASE_POOLER_HOST. The session pooler rather
+//    than `supabase link`: linking needs Management API access to the project,
+//    which a CLI logged into a different Supabase account does not have, and
+//    the direct db.<ref>.supabase.co host is IPv6-only.
+//
 // Usage, from package.json:
 //   node scripts/supabase.mjs start
 //   node scripts/supabase.mjs --require-local db reset
+//   node scripts/supabase.mjs --remote db push
 
 import { spawnSync } from 'node:child_process'
 
@@ -46,13 +55,24 @@ export function requireLocalStack() {
   process.exit(1)
 }
 
+export function remoteDbUrl() {
+  const { SUPABASE_PROJECT_REF: ref, SUPABASE_DB_PASSWORD: password, SUPABASE_POOLER_HOST: host } = process.env
+  if (!ref || !password || !host) {
+    console.error('ERROR: SUPABASE_PROJECT_REF, SUPABASE_DB_PASSWORD and SUPABASE_POOLER_HOST must be set in .env.local')
+    process.exit(1)
+  }
+  return `postgresql://postgres.${ref}:${encodeURIComponent(password)}@${host}:5432/postgres`
+}
+
 // Only act as a CLI when run directly, so the helpers above can be imported.
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2)
-  const requireLocal = args[0] === '--require-local'
-  if (requireLocal) {
+  if (args[0] === '--require-local') {
     args.shift()
     requireLocalStack()
+  } else if (args[0] === '--remote') {
+    args.shift()
+    args.push('--db-url', remoteDbUrl())
   }
 
   const result = spawnSync('npx', ['supabase', ...args], {

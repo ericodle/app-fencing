@@ -17,13 +17,12 @@ Fill into `.env.local`:
 SUPABASE_PROJECT_REF=       # from the project URL
 SUPABASE_DB_PASSWORD=       # the one from project creation
 SUPABASE_ACCESS_TOKEN=      # supabase.com/dashboard/account/tokens
-SUPABASE_POOLER_HOST=       # Settings → Database → Connection string
+SUPABASE_POOLER_HOST=       # Connect → Session pooler, e.g. aws-0-ap-southeast-2.pooler.supabase.com
 ```
 
 Then:
 
 ```sh
-npm run db:link
 npm run db:push     # applies all six migrations to the cloud project
 npm run db:auth     # points Auth's Site URL and redirect allow list at urls.app
 ```

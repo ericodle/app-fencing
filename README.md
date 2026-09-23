@@ -106,8 +106,8 @@ The app runs on one Supabase project and two Cloudflare Workers, both on free
 tiers for a club this size.
 
 ```sh
-npm run db:link && npm run db:push    # apply migrations to your Supabase project
-npm run deploy               # build and ship both workers
+npm run db:push     # apply migrations to your Supabase project
+npm run deploy      # build and ship both workers
 ```
 
 Required environment variables are documented in
