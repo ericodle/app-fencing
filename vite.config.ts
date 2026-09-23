@@ -61,7 +61,7 @@ export default defineConfig(({ command, mode }) => {
         // autoUpdate the page hard-reloads itself the moment a deploy lands,
         // which is a fine way to lose a half-filled bout sheet.
         registerType: 'prompt',
-        includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons/*.png'],
+        includeAssets: ['favicon.png', 'logo.webp', 'apple-touch-icon.png', 'icons/*.png'],
         manifest: {
           name: clubConfig.identity.clubName,
           short_name: clubConfig.identity.shortName,

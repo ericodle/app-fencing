@@ -17,7 +17,7 @@ export function PendingPage() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-4 py-10 text-center">
-      <Logo size={72} showName={false} />
+      <Logo size={160} className="mx-auto" />
 
       <div className="plate p-6">
         <h1 className="font-display text-xl text-gold">

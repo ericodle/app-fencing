@@ -64,8 +64,9 @@ export const clubConfig = {
   },
 
   assets: {
-    logo: '/logo.svg',
-    favicon: '/favicon.svg',
+    // The emblem, rendered from the marketing site's trace (its tools/icons.py).
+    logo: '/logo.webp',
+    favicon: '/favicon.png',
     icon192: '/icons/icon-192.png',
     icon512: '/icons/icon-512.png',
     appleTouchIcon: '/apple-touch-icon.png',
