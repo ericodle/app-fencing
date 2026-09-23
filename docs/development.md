@@ -40,7 +40,7 @@ rows, because a feature with nothing on it cannot be judged:
 - **Six venues** across Taipei, with real coordinates, spread deliberately from
   Banqiao in the west to Nangang in the east.
 - **Seven sessions** on the calendar: Tuesday open training, saber night, a
-  Saturday pop-up, an interclub at Banqiao, the end-of-term dinner, last week's
+  Saturday cross-training session, an interclub at Banqiao, the end-of-term dinner, last week's
   practice, and a four-evening beginner course — with the rota assigning each
   to Coach Ku or Coach Eric by weapon, and both of them to open training,
   which runs both.

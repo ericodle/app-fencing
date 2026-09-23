@@ -18,12 +18,12 @@ shop.
   because that is what people decide on. Answers carry the logistics too — what
   time you can get there, whether you can drive, whether you need a lift.
 
-- **The meetup planner.** The club is online-first and runs pop-up practices all
-  over Taipei, so "where shall we meet" is a real weekly question. Given
-  everyone who said yes and where they are coming from, the planner computes two
-  answers — the point of least *total* travel, and the point where the *longest*
-  single journey is shortest — shows what each one costs, and ranks the club's
-  actual venues against them. See [docs/meetup.md](docs/meetup.md).
+- **The meetup planner.** The club is online-first and runs cross-training
+  sessions all over Taipei, so "where shall we meet" is a real weekly question.
+  Given everyone who said yes and where they are coming from, the planner
+  computes two answers — the point of least *total* travel, and the point where
+  the *longest* single journey is shortest — shows what each one costs, and
+  ranks the club's actual venues against them. See [docs/meetup.md](docs/meetup.md).
 
 - **Bouts.** Score, opponent, weapon, notes. A bout between two members is
   stored once and shown to both, from each one's own side, so the two cannot

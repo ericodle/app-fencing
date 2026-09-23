@@ -20,9 +20,10 @@ export const EVENT_KINDS = [
   // A taught group course that runs on an explicit list of days — the adult
   // beginner term, the kids' term. Registration is for the whole course.
   'course',
-  // A one-off session at a venue that is not the regular one: park footwork,
-  // a borrowed salle, a pop-up. The kind the meetup planner exists for.
-  'popup',
+  // Conditioning away from the strip: a run, hill sprints, strength work in a
+  // park. No blades. Meets wherever suits whoever is coming, so it is the kind
+  // the meetup planner exists for.
+  'cross_training',
   // A competition, ours or someone else's. Produces competition results, not
   // practice bouts.
   'tournament',
@@ -79,7 +80,7 @@ export function heldAtHomeVenue(kind: EventKind): boolean {
  * moves because six people happen to live north this week.
  */
 export function venueIsNegotiable(kind: EventKind): boolean {
-  return kind === 'popup'
+  return kind === 'cross_training'
 }
 
 /**
@@ -87,7 +88,7 @@ export function venueIsNegotiable(kind: EventKind): boolean {
  * whether the event detail page offers the bout sheet.
  */
 export function hasBouting(kind: EventKind): boolean {
-  return kind !== 'social'
+  return kind !== 'social' && kind !== 'cross_training'
 }
 
 /**
@@ -100,11 +101,11 @@ export function producesCompetitionResults(kind: EventKind): boolean {
 }
 
 /**
- * True when fencers need to bring — or borrow — full kit. Park footwork is
+ * True when fencers need to bring — or borrow — full kit. Cross-training is
  * done in running shoes, and nobody brings a mask to dinner.
  */
 export function requiresKit(kind: EventKind): boolean {
-  return kind !== 'social' && kind !== 'popup'
+  return kind !== 'social' && kind !== 'cross_training'
 }
 
 /**

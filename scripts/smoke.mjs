@@ -64,9 +64,9 @@ console.log('calendar')
 await page.goto('http://localhost:5373/calendar', { waitUntil: 'networkidle' })
 await shot('03-calendar')
 
-console.log('the pop-up session, with poll + planner')
-// Find the park footwork event by its title in the month list.
-await page.getByRole('link', { name: /Park footwork/ }).first().click()
+console.log('the cross-training session, with poll + planner')
+// Find the park conditioning event by its title in the month list.
+await page.getByRole('link', { name: /Park conditioning/ }).first().click()
 await page.waitForLoadState('networkidle')
 await page.waitForTimeout(1200)
 await shot('04-event-poll-meetup')

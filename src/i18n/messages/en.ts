@@ -61,7 +61,7 @@ export const en = {
   eventKinds: {
     practice: 'Practice',
     course: 'Course',
-    popup: 'Pop-up',
+    cross_training: 'Cross-training',
     tournament: 'Tournament',
     interclub: 'Interclub',
     social: 'Social',
@@ -180,7 +180,7 @@ export const en = {
     refereeQualification: 'Refereeing',
     competitionNotes: 'Competition experience',
     homeArea: 'Home area',
-    homeAreaHelp: 'A neighborhood, not an address. Used to work out where the club should meet for a pop-up session, and shown to other members as the label only.',
+    homeAreaHelp: 'A neighborhood, not an address. Used to work out where the club should meet for a cross-training session, and shown to other members as the label only.',
     travelMode: 'I usually get there by',
     seatsOffered: 'Seats I can offer when I drive',
     incomplete: 'A few things are still blank',

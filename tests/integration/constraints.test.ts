@@ -74,7 +74,7 @@ describe('events', () => {
   it('lets a coach move a session, because the meetup planner is for coaches', async () => {
     const somewhere = await venue()
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'popup', admin_title: 'Coach moves this', start_date: '2026-12-15' })
+      .insert({ kind: 'cross_training', admin_title: 'Coach moves this', start_date: '2026-12-15' })
       .select().single()
     created.push({ table: 'events', id: event!.id })
 
@@ -90,7 +90,7 @@ describe('events', () => {
 
   it('does not let a coach change what a session IS', async () => {
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'popup', admin_title: 'Not the coach\u2019s to rename', start_date: '2026-12-16', price: 400 })
+      .insert({ kind: 'cross_training', admin_title: 'Not the coach\u2019s to rename', start_date: '2026-12-16', price: 400 })
       .select().single()
     created.push({ table: 'events', id: event!.id })
 
@@ -123,7 +123,7 @@ describe('events', () => {
     const third = await venue()
 
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'popup', admin_title: 'Moving target', start_date: '2026-12-01', venue_id: first.id })
+      .insert({ kind: 'cross_training', admin_title: 'Moving target', start_date: '2026-12-01', venue_id: first.id })
       .select().single()
     created.push({ table: 'events', id: event!.id })
 
@@ -174,7 +174,7 @@ describe('attendance', () => {
 
   it('allows exactly one chosen meetup suggestion per poll', async () => {
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'popup', admin_title: 'One choice', start_date: '2026-12-03' })
+      .insert({ kind: 'cross_training', admin_title: 'One choice', start_date: '2026-12-03' })
       .select().single()
     created.push({ table: 'events', id: event!.id })
     const { data: poll } = await admin.from('attendance_polls')
@@ -193,7 +193,7 @@ describe('attendance', () => {
 
   it('stamps who chose a suggestion, and when', async () => {
     const { data: event } = await admin.from('events')
-      .insert({ kind: 'popup', admin_title: 'Stamped', start_date: '2026-12-04' })
+      .insert({ kind: 'cross_training', admin_title: 'Stamped', start_date: '2026-12-04' })
       .select().single()
     created.push({ table: 'events', id: event!.id })
     const { data: poll } = await admin.from('attendance_polls')

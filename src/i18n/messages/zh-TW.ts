@@ -60,7 +60,7 @@ export const zhTW: Messages = {
   eventKinds: {
     practice: '練習',
     course: '課程',
-    popup: '快閃練習',
+    cross_training: '交叉訓練',
     tournament: '比賽',
     interclub: '交流賽',
     social: '聚會',
@@ -179,7 +179,7 @@ export const zhTW: Messages = {
     refereeQualification: '裁判資格',
     competitionNotes: '比賽經歷',
     homeArea: '居住區域',
-    homeAreaHelp: '填行政區即可，不需要地址。用來計算快閃練習的集合地點，其他成員只會看到你填的區域名稱。',
+    homeAreaHelp: '填行政區即可，不需要地址。用來計算交叉訓練的集合地點，其他成員只會看到你填的區域名稱。',
     travelMode: '我通常的交通方式',
     seatsOffered: '我開車時可以提供的座位',
     incomplete: '還有幾項沒填',

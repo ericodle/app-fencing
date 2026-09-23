@@ -36,13 +36,13 @@ on conflict (version) do nothing;
 insert into public.waivers (code, version, title, body, applies_to, requires_guardian, published_at) values
   ('liability', 1, 'Assumption of risk and release of liability',
    E'Fencing is a combat sport conducted with a weapon. I understand that injury is possible even when every rule is followed, and I accept that risk.\n\nI confirm that I will fence only in equipment that meets the standard for my weapon, and that I will stop immediately when the referee or coach calls halt.',
-   array['practice','course','popup','tournament','interclub'], false, now()),
+   array['practice','course','cross_training','tournament','interclub'], false, now()),
   ('media', 1, 'Media release',
    E'I agree that photographs and video taken at club sessions and competitions may be used by the club to show what it does.\n\nI may withdraw this at any time by telling a coach, and any image of me will be removed from anything the club controls.',
-   array['practice','course','popup','tournament','interclub','social'], false, now()),
+   array['practice','course','cross_training','tournament','interclub','social'], false, now()),
   ('safeguarding', 1, 'Consent for a fencer under 18',
    E'I am the parent or legal guardian of the fencer named below. I consent to their taking part in club sessions and competitions, and to first aid being given if it is needed and I cannot be reached.',
-   array['practice','course','popup','tournament','interclub','social'], true, now())
+   array['practice','course','cross_training','tournament','interclub','social'], true, now())
 on conflict (code, version) do nothing;
 
 
@@ -77,7 +77,7 @@ insert into public.venues (id, name, native_name, kind, address, district, lat, 
 on conflict (id) do nothing;
 
 insert into public.prices (label, amount, currency, unit, applies_to, sort_order) values
-  ('Drop-in, open training',   400, 'NTD', 'session', array['practice','popup'], 1),
+  ('Drop-in, open training',   400, 'NTD', 'session', array['practice','cross_training'], 1),
   ('Adult beginner term',     6000, 'NTD', 'term',    array['course'],           2),
   ('Kids'' term',             5000, 'NTD', 'term',    array['course'],           3),
   ('Ten-session card',        3500, 'NTD', 'pass',    array['practice'],         4),
@@ -108,12 +108,12 @@ insert into public.events (
    'Épée and saber bouting with a coach on the floor. Guests from other clubs welcome.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
 
-  ('22222222-0000-4000-8000-000000000002', 'popup',
-   'Park footwork — Saturday', 'Park footwork', 'Park footwork',
+  ('22222222-0000-4000-8000-000000000002', 'cross_training',
+   'Park conditioning — Saturday', 'Park conditioning', 'Park conditioning',
    '11111111-0000-4000-8000-000000000002',
    (current_date + 4), '06:45', '07:45', '{}', 'all', 30, null, null,
    true, true,
-   'No blades needed: footwork drills in running shoes. Where we meet depends on who is coming — check the planner on Friday night.',
+   'No blades needed: sprints, footwork ladders and core work in running shoes. Where we meet depends on who is coming — check the planner on Friday night.',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
 
   ('22222222-0000-4000-8000-000000000003', 'practice',
@@ -176,12 +176,12 @@ on conflict do nothing;
 
 
 -- ── an open poll, with answers ───────────────────────────────────────────────
--- The Saturday pop-up: five people from five districts, which is exactly the
+-- Saturday cross-training: five people from five districts, which is exactly the
 -- shape the meetup planner is for.
 insert into public.attendance_polls (id, event_id, question, closes_at, created_by)
 values ('33333333-0000-4000-8000-000000000001',
         '22222222-0000-4000-8000-000000000002',
-        'Coming to park footwork on Saturday? Say yes by Friday night and the planner will pick where.',
+        'Coming to park conditioning on Saturday? Say yes by Friday night and the planner will pick where.',
         (current_date + 3 + time '21:00') at time zone 'Asia/Taipei',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb')
 on conflict (event_id) do nothing;

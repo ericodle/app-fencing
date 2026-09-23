@@ -1,8 +1,8 @@
 # The meetup planner
 
-The club is online-first and runs pop-up practices all over Taipei. "Where shall
-we meet on Saturday" is therefore a real weekly question with a real answer, and
-this is the feature that answers it.
+The club is online-first and runs cross-training sessions all over Taipei.
+"Where shall we meet on Saturday" is therefore a real weekly question with a
+real answer, and this is the feature that answers it.
 
 ## The question is underspecified, and that is the design problem
 

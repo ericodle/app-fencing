@@ -8,7 +8,7 @@ import { haversineKm } from '../../src/lib/geo'
 
 // The whole feature, once, as a journey rather than as a set of rules:
 //
-//   a coach schedules a pop-up → opens a poll → four members answer from four
+//   a coach schedules cross-training → opens a poll → four members answer from four
 //   corners of the city → the planner ranks the club's venues → the coach picks
 //   one → the session moves, and the app can still say where it started.
 //
@@ -66,11 +66,11 @@ afterAll(async () => {
 }, 30_000)
 
 describe('from "who is coming?" to "we are meeting here"', () => {
-  it('a coach schedules a pop-up with the planner switched on', async () => {
+  it('a coach schedules cross-training with the planner switched on', async () => {
     const { data, error } = await admin.from('events').insert({
-      kind: 'popup',
-      admin_title: 'Saturday footwork — venue TBD',
-      display_title: 'Park footwork',
+      kind: 'cross_training',
+      admin_title: 'Saturday conditioning — venue TBD',
+      display_title: 'Park conditioning',
       start_date: '2026-12-05',
       start_time: '06:45',
       meetup_open: true,

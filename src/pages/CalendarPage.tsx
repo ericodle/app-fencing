@@ -19,17 +19,17 @@ import type { AttendanceTally } from '../types/db'
 // at the 3rd on the 5th should see that it happened, not find a hole.
 //
 // Each kind takes a color, and the five are a genuine categorical spread rather
-// than five tints of gold: weekly silver, pop-up blue, tournament gold,
+// than five tints of gold: weekly silver, cross-training blue, tournament gold,
 // interclub green, social deep gold. Carried over from the marketing site's
 // calendar so the two read the same.
 
 const KIND_COLOR: Record<EventKind, string> = {
-  practice:   'border-silver text-silver',
-  course:     'border-silver-deep text-silver-deep',
-  popup:      'border-signal-blue text-signal-blue',
-  tournament: 'border-gold text-gold',
-  interclub:  'border-signal-green text-signal-green',
-  social:     'border-gold-deep text-gold-deep',
+  practice:       'border-silver text-silver',
+  course:         'border-silver-deep text-silver-deep',
+  cross_training: 'border-signal-blue text-signal-blue',
+  tournament:     'border-gold text-gold',
+  interclub:      'border-signal-green text-signal-green',
+  social:         'border-gold-deep text-gold-deep',
 }
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

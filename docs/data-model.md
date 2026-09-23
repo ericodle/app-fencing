@@ -60,8 +60,8 @@ actually happens, and there is an integration test asserting each omission.
 
 ## events
 
-One table, discriminated by `kind`: `practice | course | popup | tournament |
-interclub | social`.
+One table, discriminated by `kind`: `practice | course | cross_training |
+tournament | interclub | social`.
 
 Two temporal shapes, and this is the most load-bearing distinction in the
 schema. A course runs on an explicit `course_days` list; everything else has a

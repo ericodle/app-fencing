@@ -53,7 +53,7 @@ TypeScript cannot check gets checked. See `src/types/db.ts`.
 
 ## scenario — `tests/scenario/`
 
-Multi-step journeys rather than single rules: *a coach schedules a pop-up, opens
+Multi-step journeys rather than single rules: *a coach schedules cross-training, opens
 a poll, four members answer from four corners of the city, the planner ranks the
 venues, the coach picks one, the session moves.*
 

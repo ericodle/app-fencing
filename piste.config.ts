@@ -84,7 +84,7 @@ export const clubConfig = {
     competitionResults: true,
     // The athletic benchmark log (sprint, 5k, lunge, jump, …).
     fitnessTests: true,
-    // Who is driving whom to a pop-up venue.
+    // Who is driving whom to a cross-training venue.
     carpool: true,
   },
 
