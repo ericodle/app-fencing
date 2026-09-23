@@ -24,14 +24,11 @@ export const clubConfig = {
     appName: 'Piste',
     tagline: 'Physical training. Mental training. Data-driven.',
     clubName: 'Kuou Fencing Club',
-    // Short brand name for tight UI (push titles, badges, nav lockup).
+    // Short brand name for tight UI (push titles, badges).
     shortName: 'Kuou',
-    // The club's name in its own script, rendered under the Latin one in the
-    // header lockup. "擊劍會" is just "fencing club" — the club's own name in
-    // characters has not been settled, and this reads correctly beside "Kuou"
-    // without asserting characters nobody has chosen. The marketing site's
-    // lockup says the same thing. Blank omits the line entirely.
-    nativeName: '擊劍會',
+    // The club's name in its own script, shown under the Latin one on the
+    // login and contact pages. Blank omits the line entirely.
+    nativeName: '古歐擊劍會',
     description: 'Attendance, bouts and competition results for Kuou Fencing Club',
     logoAlt: 'Kuou Fencing Club',
   },

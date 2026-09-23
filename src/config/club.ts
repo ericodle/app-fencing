@@ -27,7 +27,7 @@ export interface ClubIdentity {
   tagline: string
   /** This club's full name, e.g. "Kuou Fencing Club". */
   clubName: string
-  /** Short brand name for tight UI (push titles, badges, the nav lockup). */
+  /** Short brand name for tight UI (push titles, badges). */
   shortName: string
   /** The club's name in its own script, shown beside the Latin one. Blank to
    *  omit — a club with no second script leaves it empty rather than repeating
